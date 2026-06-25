@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { supabase } from '@/lib/supabase';
 
-const ADMIN_PASSWORD = 'hatbar2024';
+const ADMIN_PASSWORD = 'hatbar26';
 const AUTH_KEY = 'maddhattery_admin_auth';
 
 interface Booking {
