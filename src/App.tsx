@@ -25,17 +25,16 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/design" element={<DesignPage />} />
-            <Route path="/design/saved/:id" element={<SavedDesignPage />} />
-
-            <Route path="/maddhattery-admin" element={<AdminBookings />} />
-<Route path="/maddhattery-admin/photos" element={<AdminPhotos />} />
-<Route path="/maddhattery-admin/design" element={<AdminDesignImages />} />
-<Route path="/maddhattery-admin/custom-gallery" element={<AdminCustomGallery />} />
-            <Route path="*" element={<NotFound />} />
-          </Routes>
+         <Routes>
+  <Route path="/" element={<Index />} />
+  <Route path="/design" element={<DesignPage />} />
+  <Route path="/design/saved/:id" element={<SavedDesignPage />} />
+  <Route path="/maddhattery-admin" element={<AdminCustomGallery />} />
+  <Route path="/maddhattery-admin/bookings" element={<AdminBookings />} />
+  <Route path="/maddhattery-admin/photos" element={<AdminPhotos />} />
+  <Route path="/maddhattery-admin/design" element={<AdminDesignImages />} />
+  <Route path="*" element={<NotFound />} />
+</Routes>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
