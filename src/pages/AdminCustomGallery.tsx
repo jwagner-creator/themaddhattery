@@ -2,6 +2,247 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchCustomDesigns, uploadDesignImage, addCustomDesign, updateCustomDesign, deleteCustomDesign, saveDesignOrder, convertHeicPhotos, convertHeicFiles, isHeicFile, type CustomDesign } from '@/lib/customGallery';
 const AdminCustomGallery: React.FC = () => {
+  import React, { useCallback, useEffect, useRef, useState } from 'react';
+import { Link } from 'react-router-dom';
+import { fetchCustomDesigns, uploadDesignImage, addCustomDesign, updateCustomDesign, deleteCustomDesign, saveDesignOrder, convertHeicPhotos, convertHeicFiles, isHeicFile, type CustomDesign } from '@/lib/customGallery';
+const AdminCustomGallery: React.FC = () => {
+  const [designs, setDesigns] = useState<CustomDesign[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [message, setMessage] = useState<{
+    type: 'ok' | 'err';
+    text: string;
+  } | null>(null);
+  const addInputRef = useRef<HTMLInputElement>(null);
+  const replaceInputRef = useRef<HTMLInputElement>(null);
+  const replaceTargetId = useRef<string | null>(null);
+  const [dragOver, setDragOver] = useState(false);
+  const dragIndex = useRef<number | null>(null);
+  const [overIndex, setOverIndex] = useState<number | null>(null);
+
+  // HEIC conversion tool
+  const [heicUrls, setHeicUrls] = useState('');
+  const [converting, setConverting] = useState(false);
+  // True while iPhone HEIC files picked from a device are being converted
+  const [convertingFiles, setConvertingFiles] = useState(false);
+  const flash = (type: 'ok' | 'err', text: string) => {
+    setMessage({
+      type,
+      text
+    });
+    setTimeout(() => setMessage(null), 6000);
+  };
+  const load = useCallback(async () => {
+    setLoading(true);
+    const rows = await fetchCustomDesigns();
+    setDesigns(rows);
+    setLoading(false);
+  }, []);
+  useEffect(() => {
+    load();
+  }, [load]);
+  const persistOrder = useCallback(async (ordered: CustomDesign[]) => {
+    setSaving(true);
+    const ok = await saveDesignOrder(ordered.map(d => d.id));
+    setSaving(false);
+    if (!ok) flash('err', 'Could not save the new order. Please try again.');
+  }, []);
+
+  // ---- Add new designs ----
+  // Accepts a mix of standard web images and iPhone HEIC/HEIF files.
+  // HEIC files are auto-detected and routed through the conversion edge
+  // function (upload raw -> convert to JPG -> add gallery entry), while
+  // normal images take the direct upload path.
+  const uploadNew = useCallback(async (files: FileList | File[]) => {
+    const all = Array.from(files);
+    const heicFiles = all.filter(f => isHeicFile(f));
+    const normalFiles = all.filter(f => !isHeicFile(f) && f.type.startsWith('image/'));
+    const skipped = all.length - heicFiles.length - normalFiles.length;
+    if (heicFiles.length === 0 && normalFiles.length === 0) {
+      flash('err', 'Please choose image files (jpg, png, webp, or iPhone HEIC).');
+      return;
+    }
+    const added: CustomDesign[] = [];
+
+    // 1) Standard web images — direct upload path.
+    if (normalFiles.length > 0) {
+      setUploading(true);
+      for (const file of normalFiles) {
+        const url = await uploadDesignImage(file);
+        if (!url) continue;
+        const row = await addCustomDesign(url, '', '');
+        if (row) added.push(row);
+      }
+      setUploading(false);
+    }
+
+    // 2) iPhone HEIC/HEIF — auto-convert via the mirror edge function.
+    let convertedCount = 0;
+    let convertFailed = 0;
+    if (heicFiles.length > 0) {
+      setConvertingFiles(true);
+      const results = await convertHeicFiles(heicFiles);
+      setConvertingFiles(false);
+      convertedCount = results.filter(r => r.status === 'ok').length;
+      convertFailed = heicFiles.length - convertedCount;
+    }
+
+    // Refresh from DB so converted (edge-function-inserted) entries appear.
+    if (convertedCount > 0) {
+      await load();
+    } else if (added.length > 0) {
+      setDesigns(prev => [...prev, ...added]);
+    }
+    const totalOk = added.length + convertedCount;
+    if (totalOk > 0) {
+      flash('ok', `Added ${totalOk} photo${totalOk > 1 ? 's' : ''}` + (convertedCount ? ` (${convertedCount} iPhone HEIC converted to JPG)` : '') + (convertFailed || skipped ? ` — ${convertFailed + skipped} could not be added.` : '.'));
+    } else {
+      flash('err', 'Upload failed. Please try again.');
+    }
+  }, [load]);
+  const onPickAdd = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) uploadNew(e.target.files);
+    if (addInputRef.current) addInputRef.current.value = '';
+  };
+  const onDropUpload = (e: React.DragEvent) => {
+    e.preventDefault();
+    setDragOver(false);
+    if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      uploadNew(e.dataTransfer.files);
+    }
+  };
+
+  // ---- Convert HEIC URLs -> JPG and add to gallery ----
+  const onConvertHeic = useCallback(async () => {
+    const urls = heicUrls.split(/[\n,]+/).map(u => u.trim()).filter(u => /^https?:\/\//i.test(u));
+    if (urls.length === 0) {
+      flash('err', 'Paste at least one image URL (one per line).');
+      return;
+    }
+    setConverting(true);
+    const results = await convertHeicPhotos(urls.map(url => ({
+      url
+    })), true);
+    setConverting(false);
+    const ok = results.filter(r => r.status === 'ok');
+    const failed = results.filter(r => r.status !== 'ok');
+    if (ok.length > 0) {
+      const convertedCount = ok.filter(r => r.converted).length;
+      flash('ok', `Added ${ok.length} photo${ok.length > 1 ? 's' : ''}` + (convertedCount ? ` (${convertedCount} HEIC converted to JPG)` : '') + (failed.length ? ` — ${failed.length} failed.` : '.'));
+      setHeicUrls('');
+      await load();
+    } else {
+      flash('err', 'Could not process those URLs. Check the links and try again.');
+    }
+  }, [heicUrls, load]);
+
+  // ---- Replace an existing design's image ----
+  const triggerReplace = (id: string) => {
+    replaceTargetId.current = id;
+    replaceInputRef.current?.click();
+  };
+  const onPickReplace = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    const id = replaceTargetId.current;
+    if (replaceInputRef.current) replaceInputRef.current.value = '';
+    replaceTargetId.current = null;
+    if (!file || !id) return;
+    setUploading(true);
+    const url = await uploadDesignImage(file);
+    setUploading(false);
+    if (!url) {
+      flash('err', 'Could not upload the replacement image.');
+      return;
+    }
+    const ok = await updateCustomDesign(id, {
+      src: url
+    });
+    if (!ok) {
+      flash('err', 'Could not save the new image.');
+      return;
+    }
+    setDesigns(prev => prev.map(d => d.id === id ? {
+      ...d,
+      src: url
+    } : d));
+    flash('ok', 'Image replaced.');
+  };
+
+  // ---- Edit title / note ----
+  const onFieldChange = (id: string, field: 'title' | 'note', value: string) => {
+    setDesigns(prev => prev.map(d => d.id === id ? {
+      ...d,
+      [field]: value
+    } : d));
+  };
+  const saveField = async (id: string, field: 'title' | 'note', value: string) => {
+    const ok = await updateCustomDesign(id, {
+      [field]: value
+    });
+    if (!ok) flash('err', 'Could not save your edit.');
+  };
+
+  // ---- Delete ----
+  const remove = async (id: string) => {
+    if (!confirm('Remove this design from your homepage gallery?')) return;
+    const ok = await deleteCustomDesign(id);
+    if (!ok) {
+      flash('err', 'Could not delete this design.');
+      return;
+    }
+    const next = designs.filter(d => d.id !== id);
+    setDesigns(next);
+    await persistOrder(next);
+    flash('ok', 'Design removed.');
+  };
+
+  // ---- Reordering ----
+  const handleDragStart = (index: number) => (e: React.DragEvent) => {
+    dragIndex.current = index;
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/x-reorder', String(index));
+  };
+  const handleDragOverItem = (index: number) => (e: React.DragEvent) => {
+    if (dragIndex.current === null) return;
+    e.preventDefault();
+    e.dataTransfer.dropEffect = 'move';
+    if (overIndex !== index) setOverIndex(index);
+  };
+  const handleDropItem = (index: number) => (e: React.DragEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const from = dragIndex.current;
+    dragIndex.current = null;
+    setOverIndex(null);
+    if (from === null || from === index) return;
+    setDesigns(prev => {
+      const next = [...prev];
+      const [moved] = next.splice(from, 1);
+      next.splice(index, 0, moved);
+      persistOrder(next);
+      return next;
+    });
+  };
+  const handleDragEnd = () => {
+    dragIndex.current = null;
+    setOverIndex(null);
+  };
+  const move = (index: number, dir: -1 | 1) => {
+    setDesigns(prev => {
+      const target = index + dir;
+      if (target < 0 || target >= prev.length) return prev;
+      const next = [...prev];
+      [next[index], next[target]] = [next[target], next[index]];
+      persistOrder(next);
+      return next;
+    });
+  };
+  return <div className="min-h-screen bg-[#1f1812] text-[#f3ead9] bg-[url('https://d64gsuwffb70l.cloudfront.net/6834789ecdd892bd5a829aa2_1781995560510_8c39c291.jpeg')] bg-contain bg-center">
+      {/* Hidden file input for replacing images */}
+      <input ref={replaceInputRef} type="file" accept="image/*" onChange={onPickReplace} className="hidden" />
+
+
   const [designs, setDesigns] = useState<CustomDesign[]>([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
