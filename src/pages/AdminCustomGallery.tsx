@@ -6,20 +6,43 @@ const AdminCustomGallery: React.FC = () => {
 import { Link } from 'react-router-dom';
 import { fetchCustomDesigns, uploadDesignImage, addCustomDesign, updateCustomDesign, deleteCustomDesign, saveDesignOrder, convertHeicPhotos, convertHeicFiles, isHeicFile, type CustomDesign } from '@/lib/customGallery';
 const AdminCustomGallery: React.FC = () => {
-  const [designs, setDesigns] = useState<CustomDesign[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [uploading, setUploading] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState<{
-    type: 'ok' | 'err';
-    text: string;
-  } | null>(null);
-  const addInputRef = useRef<HTMLInputElement>(null);
-  const replaceInputRef = useRef<HTMLInputElement>(null);
-  const replaceTargetId = useRef<string | null>(null);
-  const [dragOver, setDragOver] = useState(false);
-  const dragIndex = useRef<number | null>(null);
-  const [overIndex, setOverIndex] = useState<number | null>(null);
+  const [authed, setAuthed] = useState(() => sessionStorage.getItem('maddhattery_admin_auth') === 'true');
+const [pwInput, setPwInput] = useState('');
+const [pwError, setPwError] = useState('');
+
+const handleLogin = (e: React.FormEvent) => {
+  e.preventDefault();
+  if (pwInput === 'hatbar26') {
+    sessionStorage.setItem('maddhattery_admin_auth', 'true');
+    setAuthed(true);
+    setPwError('');
+  } else {
+    setPwError('Incorrect password.');
+  }
+};
+
+if (!authed) {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-[#f6efe4] p-4">
+      <form onSubmit={handleLogin} className="w-full max-w-sm bg-white rounded-2xl shadow-xl border border-[#e0d4c0] p-8">
+        <p className="text-xs uppercase tracking-[0.25em] text-[#b8915a] mb-2">the maddhattery</p>
+        <h1 className="font-serif text-2xl text-[#2a2018] mb-6">Admin Login</h1>
+        <input
+          type="password"
+          autoFocus
+          value={pwInput}
+          onChange={(e) => setPwInput(e.target.value)}
+          placeholder="Enter admin password"
+          className="w-full rounded-lg border border-[#d8cbb4] px-4 py-3 outline-none focus:border-[#c9a36a] mb-3"
+        />
+        {pwError && <p className="text-sm text-red-600 mb-3">{pwError}</p>}
+        <button type="submit" className="w-full rounded-full bg-[#2a2018] hover:bg-[#3a2e22] text-[#f3ead9] font-semibold py-3 transition-colors">
+          Sign in
+        </button>
+      </form>
+    </div>
+  );
+}
 
   // HEIC conversion tool
   const [heicUrls, setHeicUrls] = useState('');
