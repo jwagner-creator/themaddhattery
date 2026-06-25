@@ -30,11 +30,10 @@ const App = () => (
             <Route path="/design" element={<DesignPage />} />
             <Route path="/design/saved/:id" element={<SavedDesignPage />} />
 
-            <Route path="/admin" element={<AdminBookings />} />
-            <Route path="/admin/photos" element={<AdminPhotos />} />
-            <Route path="/admin/design" element={<AdminDesignImages />} />
-            <Route path="/admin/custom-gallery" element={<AdminCustomGallery />} />
-
+            <Route path="/maddhattery-admin" element={<AdminBookings />} />
+<Route path="/maddhattery-admin/photos" element={<AdminPhotos />} />
+<Route path="/maddhattery-admin/design" element={<AdminDesignImages />} />
+<Route path="/maddhattery-admin/custom-gallery" element={<AdminCustomGallery />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
