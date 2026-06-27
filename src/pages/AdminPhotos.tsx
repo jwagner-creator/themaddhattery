@@ -201,17 +201,17 @@ const AdminPhotos: React.FC = () => {
               View site
             </Link>
             <Link
-              to="/admin/design"
-              className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors"
-            >
-              Design page photos
-            </Link>
-            <Link
-              to="/admin"
-              className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors"
-            >
-              Bookings
-            </Link>
+  to="/maddhattery-admin/design"
+  className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors"
+>
+  Design page photos
+</Link>
+<Link
+  to="/maddhattery-admin/bookings"
+  className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors"
+>
+  Bookings
+</Link>
           </div>
 
         </div>
