@@ -467,11 +467,12 @@ const AdminDesignImages: React.FC = () => {
               View design page
             </Link>
             <Link
-              to="/admin/photos"
-              className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors"
-            >
-              Gallery photos
-            </Link>
+    
+  to="/maddhattery-admin/photos"
+  className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors"
+>
+  Gallery photos
+</Link>
           </div>
         </div>
 
