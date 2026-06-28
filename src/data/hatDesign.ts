@@ -107,7 +107,7 @@ export const HAT_BASES: HatBase[] = [
 
   {
     id: 'wool-felt',
-    name: 'Western Australian Wool Felt Flat Brim',
+    name: 'Australian Wool Felt Flat Brim',
     tierId: 'tier-4',
     range: '$139',
     image: 'https://d64gsuwffb70l.cloudfront.net/6834789ecdd892bd5a829aa2_1782191254986_a026dd83.jpg',
