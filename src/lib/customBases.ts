@@ -15,6 +15,7 @@ export interface CustomBaseRow {
   image: string;
   sort_order: number;
   active: boolean;
+  sizes: string[] | null;
 }
 
 export interface NewBaseInput {
@@ -22,6 +23,7 @@ export interface NewBaseInput {
   range: string;
   description: string;
   image: string;
+  sizes: string[];
 }
 
 /** Convert a DB row into the shared HatBase shape used everywhere. */
@@ -29,16 +31,13 @@ function rowToBase(row: CustomBaseRow): HatBase {
   return {
     id: row.id,
     name: row.name,
-    // Custom bases aren't tied to a budget tier; keep an empty tierId so the
-    // estimate falls back gracefully (the range string is what guests see).
     tierId: '',
     range: row.range,
     image: row.image,
     description: row.description,
-    // Custom bases have no preset color list; default to a neutral natural.
     colors: [{ id: 'natural', name: 'Natural', color: '#d9c2a3' }],
-    // Custom bases default to a single one-size offering.
-    sizes: ['os'],
+    // Use sizes from DB if set, otherwise default to one-size
+    sizes: row.sizes && row.sizes.length > 0 ? row.sizes : ['os'],
   };
 }
 
@@ -46,7 +45,7 @@ function rowToBase(row: CustomBaseRow): HatBase {
 export async function fetchCustomBases(): Promise<HatBase[]> {
   const { data, error } = await supabase
     .from(TABLE)
-    .select('id, name, range, description, image, sort_order, active')
+    .select('id, name, range, description, image, sort_order, active, sizes')
     .eq('active', true)
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: true });
@@ -58,7 +57,7 @@ export async function fetchCustomBases(): Promise<HatBase[]> {
 export async function fetchCustomBaseRows(): Promise<CustomBaseRow[]> {
   const { data, error } = await supabase
     .from(TABLE)
-    .select('id, name, range, description, image, sort_order, active')
+    .select('id, name, range, description, image, sort_order, active, sizes')
     .order('sort_order', { ascending: true })
     .order('created_at', { ascending: true });
   if (error || !data) return [];
@@ -73,8 +72,9 @@ export async function addCustomBase(input: NewBaseInput): Promise<CustomBaseRow 
       range: input.range,
       description: input.description,
       image: input.image,
+      sizes: input.sizes,
     })
-    .select('id, name, range, description, image, sort_order, active')
+    .select('id, name, range, description, image, sort_order, active, sizes')
     .single();
   if (error || !data) return null;
   return data as CustomBaseRow;
@@ -85,15 +85,14 @@ export async function deleteCustomBase(id: string): Promise<boolean> {
   return !error;
 }
 
-/** Update a single field (e.g. the photo) on an existing custom base hat. */
+/** Update a single field on an existing custom base hat. */
 export async function updateCustomBase(
   id: string,
-  patch: Partial<Pick<CustomBaseRow, 'name' | 'range' | 'description' | 'image'>>
+  patch: Partial<Pick<CustomBaseRow, 'name' | 'range' | 'description' | 'image' | 'sizes'>>
 ): Promise<boolean> {
   const { error } = await supabase.from(TABLE).update(patch).eq('id', id);
   return !error;
 }
-
 
 /**
  * React hook: returns the full list of base hats (built-in + any custom ones
