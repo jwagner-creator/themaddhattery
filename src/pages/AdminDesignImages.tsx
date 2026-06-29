@@ -20,8 +20,16 @@ import GalleryPickerModal from '@/components/GalleryPickerModal';
 
 const BUCKET = 'hat-bar-images';
 
-/** Lets the owner ADD brand-new base hats (name, price range, description,
- *  photo). These appear in the configurator alongside the built-in hats. */
+const SIZE_CHOICES = [
+  { id: 'os', label: 'O/S — One Size' },
+  { id: 's', label: 'S' },
+  { id: 'm', label: 'M' },
+  { id: 'l', label: 'L' },
+  { id: 'xl', label: 'XL' },
+  { id: 'sm-md', label: 'S/M' },
+  { id: 'lg-xl', label: 'L/XL' },
+];
+
 const AddBasesManager: React.FC<{
   flash: (type: 'ok' | 'err', text: string) => void;
 }> = ({ flash }) => {
@@ -31,13 +39,22 @@ const AddBasesManager: React.FC<{
   const [range, setRange] = useState('');
   const [description, setDescription] = useState('');
   const [imageUrl, setImageUrl] = useState('');
+  const [selectedSizes, setSelectedSizes] = useState<string[]>(['os']);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const load = () => fetchCustomBaseRows().then(setRows);
-  useEffect(() => {
-    load();
-  }, []);
+  useEffect(() => { load(); }, []);
+
+  const toggleSize = (id: string) => {
+    setSelectedSizes(prev => {
+      if (id === 'os') return ['os'];
+      const withoutOs = prev.filter(s => s !== 'os');
+      return withoutOs.includes(id)
+        ? withoutOs.filter(s => s !== id)
+        : [...withoutOs, id];
+    });
+  };
 
   const upload = async (file: File) => {
     if (!file.type.startsWith('image/')) {
@@ -55,7 +72,6 @@ const AddBasesManager: React.FC<{
       flash('err', `Upload failed: ${error.message}`);
       return;
     }
-
     setImageUrl(supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl);
     flash('ok', 'Photo uploaded — now fill in the details and add the hat.');
   };
@@ -67,39 +83,33 @@ const AddBasesManager: React.FC<{
   };
 
   const add = async () => {
-    if (!name.trim()) {
-      flash('err', 'Please give the hat a name.');
-      return;
-    }
-    if (!imageUrl) {
-      flash('err', 'Please upload a photo for the hat.');
-      return;
-    }
+    if (!name.trim()) { flash('err', 'Please give the hat a name.'); return; }
+    if (!imageUrl) { flash('err', 'Please upload a photo for the hat.'); return; }
+    if (selectedSizes.length === 0) { flash('err', 'Please select at least one size.'); return; }
     setSaving(true);
     const created = await addCustomBase({
       name: name.trim(),
       range: range.trim(),
       description: description.trim(),
       image: imageUrl,
+      sizes: selectedSizes,
     });
     setSaving(false);
-    if (!created) {
-      flash('err', 'Could not add the hat. Please try again.');
-      return;
-    }
+    if (!created) { flash('err', 'Could not add the hat. Please try again.'); return; }
     setName('');
     setRange('');
     setDescription('');
     setImageUrl('');
+    setSelectedSizes(['os']);
     load();
-    flash('ok', `Added “${created.name}” to the designer.`);
+    flash('ok', `Added "${created.name}" to the designer.`);
   };
 
   const remove = async (id: string, label: string) => {
     const ok = await deleteCustomBase(id);
     if (ok) {
       setRows((prev) => prev.filter((r) => r.id !== id));
-      flash('ok', `Removed “${label}”.`);
+      flash('ok', `Removed "${label}".`);
     } else {
       flash('err', 'Could not remove the hat.');
     }
@@ -109,8 +119,8 @@ const AddBasesManager: React.FC<{
     <div className="mb-12">
       <h2 className="font-serif text-2xl mb-2">Add a new base hat</h2>
       <p className="text-[#cbbfa9] text-sm mb-5 max-w-2xl">
-        Upload a photo, name it, and it shows up instantly in the “Choose your base hat” step on
-        the design page — no code needed.
+        Upload a photo, name it, choose available sizes, and it shows up instantly in the
+        "Choose your base hat" step on the design page — no code needed.
       </p>
 
       <div className="rounded-2xl bg-[#3a2e22] border border-[#4a3c2e] p-5 grid sm:grid-cols-[180px_1fr] gap-5">
@@ -138,14 +148,14 @@ const AddBasesManager: React.FC<{
         <div className="space-y-3">
           <input
             type="text"
-            placeholder="Hat name (e.g. Vintage Trucker)"
+            placeholder="Hat name (e.g. Bangora Western)"
             value={name}
             onChange={(e) => setName(e.target.value)}
             className="w-full rounded-lg bg-[#2a2018] border border-[#4a3c2e] text-[#f3ead9] placeholder-[#9a8d77] px-4 py-2.5 focus:outline-none focus:border-[#c9a36a]"
           />
           <input
             type="text"
-            placeholder="Price range (e.g. $50 – $99)"
+            placeholder="Price range (e.g. $77)"
             value={range}
             onChange={(e) => setRange(e.target.value)}
             className="w-full rounded-lg bg-[#2a2018] border border-[#4a3c2e] text-[#f3ead9] placeholder-[#9a8d77] px-4 py-2.5 focus:outline-none focus:border-[#c9a36a]"
@@ -157,6 +167,34 @@ const AddBasesManager: React.FC<{
             rows={2}
             className="w-full rounded-lg bg-[#2a2018] border border-[#4a3c2e] text-[#f3ead9] placeholder-[#9a8d77] px-4 py-2.5 focus:outline-none focus:border-[#c9a36a] resize-none"
           />
+
+          {/* Size selection */}
+          <div>
+            <p className="text-xs uppercase tracking-wider text-[#9a8d77] mb-2">Available sizes</p>
+            <div className="flex flex-wrap gap-2">
+              {SIZE_CHOICES.map(s => {
+                const selected = selectedSizes.includes(s.id);
+                return (
+                  <button
+                    key={s.id}
+                    type="button"
+                    onClick={() => toggleSize(s.id)}
+                    className={`rounded-full px-4 py-1.5 text-sm font-medium transition-colors border ${
+                      selected
+                        ? 'bg-[#c9a36a] border-[#c9a36a] text-[#2a2018]'
+                        : 'bg-transparent border-[#5a4a37] text-[#cbbfa9] hover:border-[#c9a36a]'
+                    }`}
+                  >
+                    {s.label}
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-xs text-[#9a8d77] mt-1">
+              Select "O/S" for one-size hats, or individual sizes for fitted hats like wool felt and Bangora.
+            </p>
+          </div>
+
           <button
             type="button"
             disabled={saving}
@@ -168,7 +206,7 @@ const AddBasesManager: React.FC<{
         </div>
       </div>
 
-      {/* Existing custom hats — each has its own "Change photo" button */}
+      {/* Existing custom hats */}
       {rows.length > 0 && (
         <div className="mt-6">
           <p className="text-sm text-[#9a8d77] mb-3">Your added hats — change each photo individually</p>
@@ -191,8 +229,7 @@ const AddBasesManager: React.FC<{
   );
 };
 
-/** A single admin card for one custom (owner-added) base hat. Lets the owner
- *  swap THIS hat's photo without removing and re-adding it. */
+/** A single admin card for one custom (owner-added) base hat. */
 const CustomBaseCard: React.FC<{
   row: CustomBaseRow;
   flash: (type: 'ok' | 'err', text: string) => void;
@@ -223,7 +260,7 @@ const CustomBaseCard: React.FC<{
     setBusy(false);
     if (ok) {
       onUpdated(row.id, publicUrl);
-      flash('ok', `Updated the photo for “${row.name}”.`);
+      flash('ok', `Updated the photo for "${row.name}".`);
     } else {
       flash('err', 'Could not save the new photo.');
     }
@@ -238,7 +275,6 @@ const CustomBaseCard: React.FC<{
   return (
     <div className="rounded-2xl overflow-hidden bg-[#3a2e22] border border-[#4a3c2e]">
       <div className="relative aspect-square overflow-hidden bg-[#241c14]">
-        {/* key forces the <img> to reload when the URL changes */}
         <img key={row.image} src={row.image} alt={row.name} className="w-full h-full object-cover" />
         {busy && (
           <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-sm text-white">
@@ -249,6 +285,11 @@ const CustomBaseCard: React.FC<{
       <div className="p-4">
         <p className="text-sm font-medium text-[#f3ead9] leading-tight">{row.name}</p>
         {row.range && <p className="text-xs text-[#c9a36a] mt-0.5">{row.range}</p>}
+        {row.sizes && row.sizes.length > 0 && (
+          <p className="text-xs text-[#9a8d77] mt-0.5">
+            Sizes: {row.sizes.join(', ').toUpperCase()}
+          </p>
+        )}
         <input ref={fileRef} type="file" accept="image/*" onChange={onPick} className="hidden" />
         <button
           type="button"
@@ -270,7 +311,6 @@ const CustomBaseCard: React.FC<{
     </div>
   );
 };
-
 
 const SlotCard: React.FC<{
   slot: DesignSlot;
@@ -304,12 +344,11 @@ const SlotCard: React.FC<{
     setBusy(false);
     if (ok) {
       onChanged(slot.key, publicUrl);
-      flash('ok', `Updated “${slot.label}”. The new photo is now live on the design page.`);
+      flash('ok', `Updated "${slot.label}". The new photo is now live on the design page.`);
     } else {
       flash('err', 'Photo uploaded but could not be saved. Please try again.');
     }
   };
-
 
   const onPick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
@@ -317,14 +356,13 @@ const SlotCard: React.FC<{
     if (fileRef.current) fileRef.current.value = '';
   };
 
-  /** Use a photo that's already in the gallery — no upload needed. */
   const pickFromGallery = async (galleryUrl: string) => {
     setBusy(true);
     const ok = await saveDesignImage(slot.key, galleryUrl);
     setBusy(false);
     if (ok) {
       onChanged(slot.key, galleryUrl);
-      flash('ok', `Swapped “${slot.label}” to the chosen gallery photo. It's now live.`);
+      flash('ok', `Swapped "${slot.label}" to the chosen gallery photo. It's now live.`);
     } else {
       flash('err', 'Could not save the gallery photo. Please try again.');
     }
@@ -389,7 +427,6 @@ const SlotCard: React.FC<{
           )}
         </div>
       </div>
-
       <GalleryPickerModal
         open={pickerOpen}
         title={`Pick a photo for ${slot.label}`}
@@ -454,9 +491,9 @@ const AdminDesignImages: React.FC = () => {
             <p className="text-xs uppercase tracking-[0.25em] text-[#c9a36a] mb-2">Design Page Photos</p>
             <h1 className="font-serif text-3xl sm:text-4xl">Custom hat page pictures</h1>
             <p className="mt-2 text-[#cbbfa9] max-w-xl">
-              Swap the pictures shown on the “Design your hat” page. Use “Pick from gallery” to choose
-              any photo already in your gallery, or “Upload new” for a fresh one. Changes appear
-              instantly — no code, no rebuild. Use “Reset” to go back to the original photo.
+              Swap the pictures shown on the "Design your hat" page. Use "Pick from gallery" to choose
+              any photo already in your gallery, or "Upload new" for a fresh one. Changes appear
+              instantly — no code, no rebuild. Use "Reset" to go back to the original photo.
             </p>
           </div>
           <div className="flex gap-3">
@@ -467,23 +504,20 @@ const AdminDesignImages: React.FC = () => {
               View design page
             </Link>
             <Link
-    
-  to="/maddhattery-admin/photos"
-  className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors"
->
-  Gallery photos
-</Link>
+              to="/maddhattery-admin/photos"
+              className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors"
+            >
+              Gallery photos
+            </Link>
           </div>
         </div>
 
         {message && (
-          <div
-            className={`mb-6 rounded-xl px-4 py-3 text-sm ${
-              message.type === 'ok'
-                ? 'bg-green-900/40 text-green-200 border border-green-700/40'
-                : 'bg-red-900/40 text-red-200 border border-red-700/40'
-            }`}
-          >
+          <div className={`mb-6 rounded-xl px-4 py-3 text-sm ${
+            message.type === 'ok'
+              ? 'bg-green-900/40 text-green-200 border border-green-700/40'
+              : 'bg-red-900/40 text-red-200 border border-red-700/40'
+          }`}>
             {message.text}
           </div>
         )}
@@ -502,7 +536,6 @@ const AdminDesignImages: React.FC = () => {
             {renderGroup('Featured looks', looks)}
           </>
         )}
-
       </div>
     </div>
   );
