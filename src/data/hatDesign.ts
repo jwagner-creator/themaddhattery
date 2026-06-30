@@ -73,8 +73,7 @@ export const HAT_BASES: HatBase[] = [
     colors: [
       { id: 'ivory', name: 'Ivory', color: '#f5f0e6' },
       { id: 'grey', name: 'Grey', color: '#9c9a96', image: 'https://d64gsuwffb70l.cloudfront.net/6834789ecdd892bd5a829aa2_1782059410009_1ea947ea.jpg' },
-      { id: 'black', name: 'Black', color: '#1c1c1c', image:
-{ id: 'black', name: 'Black', color: '#1c1c1c', image: 'https://d64gsuwffb70l.cloudfront.net/6834789ecdd892bd5a829aa2_1782059401624_bed70152.jpg' },
+     { id: 'black', name: 'Black', color: '#1c1c1c', image: 'https://d64gsuwffb70l.cloudfront.net/6834789ecdd892bd5a829aa2_1782059401624_bed70152.jpg' },
     ],
     sizes: ['os'],
   },
