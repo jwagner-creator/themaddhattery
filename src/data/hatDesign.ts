@@ -15,6 +15,7 @@ export interface SizeOption {
   name: string; // short label shown on the size button (e.g. "S/M", "O/S")
 }
 
+// Registry of every selectable size value. Each base lists which ids it offers.
 export const SIZE_OPTIONS: Record<string, SizeOption> = {
   os: { id: 'os', name: 'O/S — One Size' },
   'sm-md': { id: 'sm-md', name: 'S/M' },
@@ -25,6 +26,7 @@ export const SIZE_OPTIONS: Record<string, SizeOption> = {
   xl: { id: 'xl', name: 'XL' },
 };
 
+// Measurement chart shown alongside the size picker.
 export interface SizeChartRow {
   size: string;
   cm: string;
@@ -41,15 +43,21 @@ export const SIZE_CHART: SizeChartRow[] = [
 export interface HatBase {
   id: string;
   name: string;
-  tierId: string;
+  tierId: string; // maps to a BUDGET_TIERS entry
   range: string;
-  price?: number;
+  price?: number; // fixed retail price in dollars (parsed from range when omitted)
   image: string;
   description: string;
   colors: HatColorOption[];
+  // Ordered list of size option ids (keys of SIZE_OPTIONS) this base is offered in.
   sizes: string[];
 }
 
+
+
+// Base hat styles for the "Design your own custom hat" configurator.
+// These are a distinct retail offering from the hat-bar budget tiers — each has
+// a fixed price and its own set of available colors.
 export const HAT_BASES: HatBase[] = [
   {
     id: 'western',
@@ -62,6 +70,7 @@ export const HAT_BASES: HatBase[] = [
       { id: 'natural', name: 'Natural', color: '#d9c2a3' },
     ],
     sizes: ['os'],
+
   },
   {
     id: 'straw',
@@ -73,9 +82,11 @@ export const HAT_BASES: HatBase[] = [
     colors: [
       { id: 'ivory', name: 'Ivory', color: '#f5f0e6' },
       { id: 'grey', name: 'Grey', color: '#9c9a96', image: 'https://d64gsuwffb70l.cloudfront.net/6834789ecdd892bd5a829aa2_1782059410009_1ea947ea.jpg' },
-     { id: 'black', name: 'Black', color: '#1c1c1c', image: 'https://d64gsuwffb70l.cloudfront.net/6834789ecdd892bd5a829aa2_1782059401624_bed70152.jpg' },
+      { id: 'black', name: 'Black', color: '#1c1c1c', image: 'https://d64gsuwffb70l.cloudfront.net/6834789ecdd892bd5a829aa2_1782059401624_bed70152.jpg' },
     ],
     sizes: ['os'],
+
+
   },
   {
     id: 'premium',
@@ -90,10 +101,13 @@ export const HAT_BASES: HatBase[] = [
       { id: 'black', name: 'Black', color: '#1c1c1c', image: 'https://d64gsuwffb70l.cloudfront.net/6834789ecdd892bd5a829aa2_1782059638005_250ff90d.webp' },
     ],
     sizes: ['sm-md', 'lg-xl'],
+
+
   },
+
   {
     id: 'wool-felt',
-    name: 'Australian Wool Felt Flat Brim',
+    name: 'Western Australian Wool Felt Flat Brim',
     tierId: 'tier-4',
     range: '$139',
     image: 'https://d64gsuwffb70l.cloudfront.net/6834789ecdd892bd5a829aa2_1782191254986_a026dd83.jpg',
@@ -119,14 +133,19 @@ export const HAT_BASES: HatBase[] = [
     ],
     sizes: ['s', 'm', 'l', 'xl'],
   },
+
 ];
+
+
 
 export interface SwatchOption {
   id: string;
   name: string;
-  color: string;
+  color: string; // CSS color for the swatch
 }
 
+// ── Hat bands ─────────────────────────────────────────────────────────────
+// Legacy single-band options (kept for featured looks, saved designs, summary).
 export const BAND_OPTIONS: SwatchOption[] = [
   { id: 'no-band', name: 'No band', color: 'transparent' },
   { id: 'fabric', name: 'Fabric band', color: '#b89b74' },
@@ -134,14 +153,18 @@ export const BAND_OPTIONS: SwatchOption[] = [
   { id: 'leather', name: 'Leather band', color: '#6b4423' },
 ];
 
+// ── Layered band builder ───────────────────────────────────────────────────
+// Guests can stack multiple band layers (fabric, leather, suede, beaded). Each
+// layer offers its own set of color / print choices. Single layers select one
+// option; the beaded layer is multi-select.
 export interface BandLayerColor {
   id: string;
   name: string;
-  color: string;
+  color: string; // CSS color (solid or gradient) for the swatch
 }
 
 export interface BandLayerGroup {
-  label?: string;
+  label?: string; // optional sub-heading e.g. "Solids" / "Prints"
   colors: BandLayerColor[];
 }
 
@@ -149,7 +172,7 @@ export interface BandLayerType {
   id: string;
   name: string;
   blurb: string;
-  multi?: boolean;
+  multi?: boolean; // true => can pick more than one color (beaded)
   groups: BandLayerGroup[];
 }
 
@@ -243,6 +266,7 @@ export const BAND_LAYERS: BandLayerType[] = [
   },
 ];
 
+/** Human-readable lines describing the selected band layers. */
 export function summarizeBandLayers(
   bandLayers?: Record<string, string[]>
 ): string[] {
@@ -259,6 +283,9 @@ export function summarizeBandLayers(
   });
 }
 
+
+// ── Edge design ───────────────────────────────────────────────────────────
+// Grommets (Gold, Black, Silver) or branded edges.
 export const EDGE_OPTIONS: SwatchOption[] = [
   { id: 'none', name: 'No edge design', color: 'transparent' },
   { id: 'grommets-gold', name: 'Grommets — Gold', color: '#c9a227' },
@@ -267,6 +294,8 @@ export const EDGE_OPTIONS: SwatchOption[] = [
   { id: 'branded', name: 'Branded edges', color: '#7a4a22' },
 ];
 
+// ── Chain ─────────────────────────────────────────────────────────────────
+// Silver, Gold, or a combo.
 export const CHAIN_OPTIONS: SwatchOption[] = [
   { id: 'none', name: 'No chain', color: 'transparent' },
   { id: 'silver', name: 'Silver chain', color: '#c0c0c0' },
@@ -274,13 +303,16 @@ export const CHAIN_OPTIONS: SwatchOption[] = [
   { id: 'combo', name: 'Silver & gold combo', color: '#b8945f' },
 ];
 
+// Backwards-compatible alias — older code/data may still reference accents.
+// Edge design replaces the previous "accent" step.
 export const ACCENT_OPTIONS = EDGE_OPTIONS;
 
+// Personalization / extras for the finished hat.
 export interface PersonalizationOption {
   id: string;
   label: string;
   detail: string;
-  price: number;
+  price: number; // starting price in dollars added to the hat total
 }
 
 export const PERSONALIZATION_OPTIONS: PersonalizationOption[] = [
@@ -293,39 +325,7 @@ export const PERSONALIZATION_OPTIONS: PersonalizationOption[] = [
   { id: 'hand-painted', label: 'Hand painted design starting at $40', detail: 'Custom hand-painted artwork', price: 40 },
 ];
 
-export interface HatDesignState {
-  baseId: string;
-  colorId?: string;
-  sizeId?: string;
-  bandId: string;
-  bandLayers?: Record<string, string[]>;
-  edgeId: string;
-  chainId: string;
-  personalization: string[];
-}
 
-export function sizesForBase(
-  baseId: string,
-  bases: HatBase[] = HAT_BASES
-): SizeOption[] {
-  const base = bases.find((b) => b.id === baseId);
-  const ids = base?.sizes && base.sizes.length ? base.sizes : ['os'];
-  return ids.map((id) => SIZE_OPTIONS[id]).filter(Boolean);
-}
-
-export interface FeaturedLook {
-  id: string;
-  name: string;
-  tagline: string;
-  image: string;
- { id: 'retro-matches', label: 'Retro matches $10', detail: 'Vintage retro matchbook accent', price: 10 },
-  { id: 'charms-pins', label: 'Charms & pins starting at $5', detail: 'Hand-picked charms and enamel pins', price: 5 },
-  { id: 'burning', label: 'Burning/distressing & branded edges $25', detail: 'Hand-burned, distressed & branded edges', price: 25 },
-  { id: 'western-bend', label: 'Western bend Wool Felts only $25', detail: 'Shaped western bend — wool felt only', price: 25 },
-  { id: 'hand-painted', label: 'Hand painted design starting at $40', detail: 'Custom hand-painted artwork', price: 40 },
-];
- 
- 
 export interface HatDesignState {
   baseId: string;
   colorId?: string; // selected color for the chosen base hat
@@ -337,9 +337,9 @@ export interface HatDesignState {
   chainId: string; // chain option
   personalization: string[];
 }
- 
- 
- 
+
+
+
 /** Helper: the size option objects available for a given base id. */
 export function sizesForBase(
   baseId: string,
@@ -349,9 +349,9 @@ export function sizesForBase(
   const ids = base?.sizes && base.sizes.length ? base.sizes : ['os'];
   return ids.map((id) => SIZE_OPTIONS[id]).filter(Boolean);
 }
- 
- 
- 
+
+
+
 // Pre-made templates guests can load into the configurator.
 export interface FeaturedLook {
   id: string;
@@ -363,7 +363,7 @@ export interface FeaturedLook {
   totalCost?: string; // e.g. "Total cost with this detailing $325-$425"
   design: HatDesignState;
 }
- 
+
 export const FEATURED_LOOKS: FeaturedLook[] = [
   {
     id: 'frio-inbetween',
@@ -411,7 +411,7 @@ export const FEATURED_LOOKS: FeaturedLook[] = [
       chainId: 'none',
       personalization: [],
     },
- 
+
   },
   {
     id: 'golden-spikes',
@@ -427,7 +427,7 @@ export const FEATURED_LOOKS: FeaturedLook[] = [
       chainId: 'gold',
       personalization: [],
     },
- 
+
   },
   {
     id: 'burned-bend-rancher',
@@ -458,7 +458,7 @@ export const FEATURED_LOOKS: FeaturedLook[] = [
       chainId: 'silver',
       personalization: [],
     },
- 
+
   },
   {
     id: 'fringe-faux-western',
@@ -474,7 +474,7 @@ export const FEATURED_LOOKS: FeaturedLook[] = [
       chainId: 'gold',
       personalization: ['charms-pins'],
     },
- 
+
   },
   {
     id: 'western-straw-classic',
