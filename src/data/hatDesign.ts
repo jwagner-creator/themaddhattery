@@ -263,4 +263,58 @@ export const EDGE_OPTIONS: SwatchOption[] = [
   { id: 'none', name: 'No edge design', color: 'transparent' },
   { id: 'grommets-gold', name: 'Grommets — Gold', color: '#c9a227' },
   { id: 'grommets-black', name: 'Grommets — Black', color: '#1c1c1c' },
-  { id:
+  { id: 'grommets-silver', name: 'Grommets — Silver', color: '#c0c0c0' },
+  { id: 'branded', name: 'Branded edges', color: '#7a4a22' },
+];
+
+export const CHAIN_OPTIONS: SwatchOption[] = [
+  { id: 'none', name: 'No chain', color: 'transparent' },
+  { id: 'silver', name: 'Silver chain', color: '#c0c0c0' },
+  { id: 'gold', name: 'Gold chain', color: '#c9a227' },
+  { id: 'combo', name: 'Silver & gold combo', color: '#b8945f' },
+];
+
+export const ACCENT_OPTIONS = EDGE_OPTIONS;
+
+export interface PersonalizationOption {
+  id: string;
+  label: string;
+  detail: string;
+  price: number;
+}
+
+export const PERSONALIZATION_OPTIONS: PersonalizationOption[] = [
+  { id: 'branding', label: 'Personalized branding starts at $25', detail: 'Your logo or initials branded into the hat', price: 25 },
+  { id: 'cards-matches', label: 'Playing card $5', detail: 'Tucked playing card accent', price: 5 },
+  { id: 'retro-matches', label: 'Retro matches $10', detail: 'Vintage retro matchbook accent', price: 10 },
+  { id: 'charms-pins', label: 'Charms & pins starting at $5', detail: 'Hand-picked charms and enamel pins', price: 5 },
+  { id: 'burning', label: 'Burning/distressing & branded edges $25', detail: 'Hand-burned, distressed & branded edges', price: 25 },
+  { id: 'western-bend', label: 'Western bend Wool Felts only $25', detail: 'Shaped western bend — wool felt only', price: 25 },
+  { id: 'hand-painted', label: 'Hand painted design starting at $40', detail: 'Custom hand-painted artwork', price: 40 },
+];
+
+export interface HatDesignState {
+  baseId: string;
+  colorId?: string;
+  sizeId?: string;
+  bandId: string;
+  bandLayers?: Record<string, string[]>;
+  edgeId: string;
+  chainId: string;
+  personalization: string[];
+}
+
+export function sizesForBase(
+  baseId: string,
+  bases: HatBase[] = HAT_BASES
+): SizeOption[] {
+  const base = bases.find((b) => b.id === baseId);
+  const ids = base?.sizes && base.sizes.length ? base.sizes : ['os'];
+  return ids.map((id) => SIZE_OPTIONS[id]).filter(Boolean);
+}
+
+export interface FeaturedLook {
+  id: string;
+  name: string;
+  tagline: string;
+  image: string;
