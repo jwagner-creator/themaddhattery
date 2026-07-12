@@ -4,13 +4,15 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useNavigate } from 'react-router-dom';
 
+const BUCKET = 'https://hystlehjwpagcktoyoia.supabase.co/storage/v1/object/public/hat-bar-images/wholesale';
+
 const CATEGORIES = [
-  { id: 'feathers', label: 'Feathers', icon: '🪶' },
-  { id: 'hat-bands', label: 'Hat Bands', icon: '🎀' },
-  { id: 'beaded-hat-bands', label: 'Beaded Hat Bands', icon: '✨' },
-  { id: 'layered-band-sets', label: 'Layered Band Sets', icon: '🎨' },
-  { id: 'hat-band-accessories', label: 'Hat Band Accessories', icon: '💎' },
-  { id: 'hat-pins', label: 'Hat Pins', icon: '📌' },
+  { id: 'feathers', label: 'Feathers', image: `${BUCKET}/wholesale-feathers.jpeg` },
+  { id: 'hat-bands', label: 'Hat Bands', image: `${BUCKET}/wholesale-hat-bands.jpeg` },
+  { id: 'beaded-hat-bands', label: 'Beaded Hat Bands', image: `${BUCKET}/wholesale-beaded-bands.jpg` },
+  { id: 'layered-band-sets', label: 'Layered Band Sets', image: `${BUCKET}/wholesale-layered-sets.jpeg` },
+  { id: 'hat-band-accessories', label: 'Hat Band Accessories', image: `${BUCKET}/wholesale-accessories.jpeg` },
+  { id: 'hat-pins', label: 'Hat Pins', image: `${BUCKET}/wholesale-hat-pins.jpeg` },
 ];
 
 const WholesalePage: React.FC = () => {
@@ -20,7 +22,6 @@ const WholesalePage: React.FC = () => {
     <div className="min-h-screen bg-[#fbf7f0] font-sans">
       <Header onPlan={() => navigate('/#builder')} />
 
-      {/* Hero */}
       <section className="relative pt-28 pb-20 bg-[#2a2018]">
         <div className="max-w-5xl mx-auto px-5 text-center">
           <p className="text-xs uppercase tracking-[0.25em] text-[#c9a36a] mb-3">Wholesale Program</p>
@@ -49,7 +50,6 @@ const WholesalePage: React.FC = () => {
         </div>
       </section>
 
-      {/* What we offer */}
       <section className="py-20 bg-[#f6efe4]">
         <div className="max-w-5xl mx-auto px-5">
           <div className="text-center mb-12">
@@ -61,16 +61,23 @@ const WholesalePage: React.FC = () => {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-5">
             {CATEGORIES.map(cat => (
-              <div key={cat.id} className="bg-white rounded-2xl border border-[#e0d4c0] p-6 text-center shadow-sm">
-                <div className="text-3xl mb-3">{cat.icon}</div>
-                <p className="font-serif text-lg text-[#2a2018]">{cat.label}</p>
+              <div key={cat.id} className="bg-white rounded-2xl border border-[#e0d4c0] overflow-hidden shadow-sm">
+                <div className="aspect-[4/3] overflow-hidden">
+                  <img
+                    src={cat.image}
+                    alt={cat.label}
+                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                  />
+                </div>
+                <div className="p-4 text-center">
+                  <p className="font-serif text-lg text-[#2a2018]">{cat.label}</p>
+                </div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* How it works */}
       <section className="py-20 bg-white">
         <div className="max-w-4xl mx-auto px-5">
           <div className="text-center mb-12">
