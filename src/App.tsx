@@ -15,10 +15,8 @@ import AdminBookings from "./pages/AdminBookings";
 import AdminPhotos from "./pages/AdminPhotos";
 import AdminDesignImages from "./pages/AdminDesignImages";
 import AdminCustomGallery from "./pages/AdminCustomGallery";
-
 import DesignPage from "./pages/DesignPage";
 import SavedDesignPage from "./pages/SavedDesignPage";
-
 
 const queryClient = new QueryClient();
 
@@ -29,16 +27,21 @@ const App = () => (
         <Toaster />
         <Sonner />
         <BrowserRouter>
-         <Routes>
-  <Route path="/" element={<Index />} />
-  <Route path="/design" element={<DesignPage />} />
-  <Route path="/design/saved/:id" element={<SavedDesignPage />} />
-  <Route path="/maddhattery-admin" element={<AdminCustomGallery />} />
-  <Route path="/maddhattery-admin/bookings" element={<AdminBookings />} />
-  <Route path="/maddhattery-admin/photos" element={<AdminPhotos />} />
-  <Route path="/maddhattery-admin/design" element={<AdminDesignImages />} />
-  <Route path="*" element={<NotFound />} />
-</Routes>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/design" element={<DesignPage />} />
+            <Route path="/design/saved/:id" element={<SavedDesignPage />} />
+            <Route path="/maddhattery-admin" element={<AdminCustomGallery />} />
+            <Route path="/maddhattery-admin/bookings" element={<AdminBookings />} />
+            <Route path="/maddhattery-admin/photos" element={<AdminPhotos />} />
+            <Route path="/maddhattery-admin/design" element={<AdminDesignImages />} />
+            <Route path="/maddhattery-admin/wholesale" element={<AdminWholesalePage />} />
+            <Route path="/wholesale" element={<WholesalePage />} />
+            <Route path="/wholesale/apply" element={<WholesaleApplyPage />} />
+            <Route path="/wholesale/login" element={<WholesaleLoginPage />} />
+            <Route path="/wholesale/catalog" element={<WholesaleCatalogPage />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
         </BrowserRouter>
       </TooltipProvider>
     </QueryClientProvider>
