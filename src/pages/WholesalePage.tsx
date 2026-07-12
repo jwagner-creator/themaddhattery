@@ -4,7 +4,7 @@ import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 import { useNavigate } from 'react-router-dom';
 
-const BUCKET = 'https://hystlehjwpagcktoyoia.supabase.co/storage/v1/object/public/hat-bar-images/wholesale';
+const BUCKET = 'https://hystlehjwpagcktoyoia.supabase.co/storage/v1/object/public/hat-bar-images';
 
 const CATEGORIES = [
   { id: 'feathers', label: 'Feathers', image: `${BUCKET}/wholesale-feathers.jpeg` },
