@@ -1,4 +1,8 @@
-
+import WholesalePage from './pages/WholesalePage';
+import WholesaleApplyPage from './pages/WholesaleApplyPage';
+import WholesaleLoginPage from './pages/WholesaleLoginPage';
+import WholesaleCatalogPage from './pages/WholesaleCatalogPage';
+import AdminWholesalePage from './pages/AdminWholesalePage';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
