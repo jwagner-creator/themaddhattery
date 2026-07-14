@@ -148,9 +148,22 @@ const AdminWholesalePage: React.FC = () => {
     });
     setSavingRetailer(false);
     if (error) { flash('err', 'Could not create retailer account.'); return; }
-    flash('ok', `Account created for ${newRetailer.business_name}.`);
-    setNewRetailer({ business_name: '', email: '', password: '' });
-  };
+  // Send login details email
+try {
+  await fetch('https://hystlehjwpagcktoyoia.supabase.co/functions/v1/wholesale-approve-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ retailer: {
+      business_name: newRetailer.business_name,
+      email: newRetailer.email,
+      password: newRetailer.password,
+    }}),
+  });
+} catch {
+  // Non-blocking
+}
+flash('ok', `Account created for ${newRetailer.business_name} — login details emailed!`);
+setNewRetailer({ business_name: '', email: '', password: '' });
 
   const uploadProductImage = async (file: File): Promise<string> => {
     const ext = file.name.split('.').pop() || 'jpg';
