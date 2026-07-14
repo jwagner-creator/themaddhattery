@@ -106,10 +106,36 @@ const AdminWholesalePage: React.FC = () => {
   }, [authed]);
 
   const updateAppStatus = async (id: string, status: string) => {
-    await supabase.from('wholesale_applications').update({ status }).eq('id', id);
-    setApplications(prev => prev.map(a => a.id === id ? { ...a, status } : a));
-  };
+  await supabase.from('wholesale_applications').update({ status }).eq('id', id);
+  setApplications(prev => prev.map(a => a.id === id ? { ...a, status } : a));
 
+  const app = applications.find(a => a.id === id);
+  if (!app) return;
+
+  try {
+    if (status === 'approved') {
+      await fetch('https://hystlehjwpagcktoyoia.supabase.co/functions/v1/wholesale-approve-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ retailer: {
+          business_name: app.business_name,
+          email: app.email,
+          password: 'Please set your password by contacting us.',
+        }}),
+      });
+      flash('ok', `Approved ${app.business_name} — approval email sent!`);
+    } else if (status === 'denied') {
+      await fetch('https://hystlehjwpagcktoyoia.supabase.co/functions/v1/wholesale-deny-email', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ application: app }),
+      });
+      flash('ok', `Denied ${app.business_name} — denial email sent.`);
+    }
+  } catch {
+    flash('err', 'Status updated but email failed to send.');
+  }
+};
   const addRetailer = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!newRetailer.business_name || !newRetailer.email || !newRetailer.password) return;
