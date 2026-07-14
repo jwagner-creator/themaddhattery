@@ -65,13 +65,23 @@ const WholesaleApplyPage: React.FC = () => {
     });
 
     if (insertError) {
-      setError('Could not submit your application. Please try again.');
-      setStatus('error');
-      return;
-    }
+  setError('Could not submit your application. Please try again.');
+  setStatus('error');
+  return;
+}
 
-    setStatus('done');
-  };
+// Trigger confirmation emails
+try {
+  await fetch('https://hystlehjwpagcktoyoia.supabase.co/functions/v1/wholesale-application-email', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ application: { ...form, contact_name: form.contact_name } }),
+  });
+} catch {
+  // Non-blocking — don't fail the submission if email fails
+}
+
+setStatus('done');
 
   return (
     <div className="min-h-screen bg-[#fbf7f0] font-sans">
