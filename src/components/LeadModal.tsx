@@ -82,7 +82,7 @@ const LeadModal: React.FC<LeadModalProps> = ({
           }),
         });
       } catch {
-        // Non-blocking — don't fail if email fails
+        // Non-blocking
       }
 
       setStatus('done');
@@ -115,7 +115,7 @@ const LeadModal: React.FC<LeadModalProps> = ({
               <p className="text-[#5b5043] mb-6">
                 We'll be in touch shortly with your custom quote. Want to lock in a time now?
               </p>
-              
+              <a
                 href={BOOKING_URL}
                 target="_blank"
                 rel="noopener noreferrer"
@@ -183,8 +183,7 @@ const LeadModal: React.FC<LeadModalProps> = ({
                     className="mt-1"
                   />
                   <span>
-                    Text me about my event. Msg &amp; data rates may apply. Reply STOP to
-                    unsubscribe.
+                    Text me about my event. Msg &amp; data rates may apply. Reply STOP to unsubscribe.
                   </span>
                 </label>
 
