@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { BOOKING_URL, money, QuoteBreakdown } from '@/data/quoteData';
 import { supabase } from '@/lib/supabase';
 
+const EDGE_URL = 'https://hystlehjwpagcktoyoia.supabase.co/functions/v1';
+
 interface LeadModalProps {
   open: boolean;
   onClose: () => void;
@@ -45,7 +47,6 @@ const LeadModal: React.FC<LeadModalProps> = ({
     if (!email) return;
     setStatus('loading');
     try {
-      // Save lead directly to your own Supabase table
       await supabase.from('leads').insert({
         name: name || null,
         email,
@@ -60,9 +61,32 @@ const LeadModal: React.FC<LeadModalProps> = ({
         deposit: breakdown ? money(breakdown.deposit) : null,
         notes: notes || null,
       });
+
+      // Send email notification
+      try {
+        await fetch(`${EDGE_URL}/event-quote-email`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            lead: {
+              name,
+              email,
+              phone,
+              event_type: eventTypeLabel,
+              event_date: eventDate,
+              guests,
+              estimated_total: breakdown ? money(breakdown.total) : null,
+              deposit: breakdown ? money(breakdown.deposit) : null,
+              notes,
+            },
+          }),
+        });
+      } catch {
+        // Non-blocking — don't fail if email fails
+      }
+
       setStatus('done');
     } catch {
-      // Still show success — never block the user
       setStatus('done');
     }
   };
@@ -91,7 +115,7 @@ const LeadModal: React.FC<LeadModalProps> = ({
               <p className="text-[#5b5043] mb-6">
                 We'll be in touch shortly with your custom quote. Want to lock in a time now?
               </p>
-              <a
+              
                 href={BOOKING_URL}
                 target="_blank"
                 rel="noopener noreferrer"
