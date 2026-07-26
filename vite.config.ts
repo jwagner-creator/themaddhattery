@@ -1,4 +1,6 @@
 import { defineConfig } from "vite";
+export default defineConfig({
+  define: { 'import.meta.env.BUILD_TIME': JSON.stringify(Date.now()) },
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
