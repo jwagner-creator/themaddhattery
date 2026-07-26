@@ -51,7 +51,7 @@ const DesignPage: React.FC = () => {
               preview your look — then save it and bring it to your consultation.
             </p>
             <Link
-              to="/admin/design"
+             to="/maddhattery-admin/design"
               className="inline-block mt-5 text-xs text-[#9a8d77] hover:text-[#c9a36a] underline underline-offset-4"
             >
               Manage these photos
