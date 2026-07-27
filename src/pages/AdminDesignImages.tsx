@@ -1,4 +1,4 @@
-// Updated: multi-color support v2
+// Updated: multi-color support v3
 import React, { useEffect, useRef, useState } from 'react';
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
