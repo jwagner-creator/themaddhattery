@@ -1,16 +1,11 @@
 // Single source of truth for all pricing & options used across the quote builder.
 
-// ─────────────────────────────────────────────────────────────────────────────
-// YOUR CALENDLY LINK
-// Replace this with your actual Calendly scheduling link.
-// Sign up free at https://calendly.com
-// ─────────────────────────────────────────────────────────────────────────────
 export const BOOKING_URL =
   import.meta.env.VITE_BOOKING_URL ||
-  'https://calendly.com/jwagner-thevinhaus/hat-bar-party-group-6-12';
+  'https://calendar.app.google/tgfsHNTCrgDPUPSK9';
 
-export const STYLIST_HOURLY_RATE = 25; // $/hr per stylist
-export const DEPOSIT_PER_GUEST = 50; // $ applied to total
+export const STYLIST_HOURLY_RATE = 25;
+export const DEPOSIT_PER_GUEST = 50;
 
 export interface EventType {
   id: string;
@@ -26,9 +21,9 @@ export const EVENT_TYPES: EventType[] = [
   { id: 'other', label: 'Other private event' },
 ];
 
-// For these event types the host does NOT cover the per-person hat cost.
 export const NO_PER_PERSON_EVENT_TYPES = ['host-sponsored-guest-paid'];
 
+// Keep BudgetTier for backward compatibility but we now use hat selection
 export interface BudgetTier {
   id: string;
   range: string;
@@ -39,40 +34,13 @@ export interface BudgetTier {
 }
 
 export const BUDGET_TIERS: BudgetTier[] = [
-  {
-    id: 'tier-1',
-    range: '$25 – $50',
-    value: 50,
-    title: 'Sourced Western Hat',
-    description: 'Sourced fun western hat that can be designed with our hat bar.',
-  },
-  {
-    id: 'tier-2',
-    range: '$50 – $99',
-    value: 99,
-    title: 'Straw or Faux Suede',
-    description: 'Quality straw or faux suede hat, personalization with hat bar.',
-  },
-  {
-    id: 'tier-3',
-    range: '$100 – $199',
-    value: 199,
-    title: 'Premium Straw / Suede',
-    description: 'Quality straw or faux suede hat, personalization with hat bar.',
-  },
-  {
-    id: 'tier-4',
-    range: '$200 – $250',
-    value: 250,
-    title: 'Australian Wool Felt',
-    description:
-      'Premium Australian wool felt — best option for branding and personalization.',
-    brandable: true,
-  },
+  { id: 'tier-1', range: '$25 – $50', value: 50, title: 'Sourced Western Hat', description: 'Sourced fun western hat that can be designed with our hat bar.' },
+  { id: 'tier-2', range: '$50 – $99', value: 99, title: 'Straw or Faux Suede', description: 'Quality straw or faux suede hat, personalization with hat bar.' },
+  { id: 'tier-3', range: '$100 – $199', value: 199, title: 'Premium Straw / Suede', description: 'Quality straw or faux suede hat, personalization with hat bar.' },
+  { id: 'tier-4', range: '$200 – $250', value: 250, title: 'Australian Wool Felt', description: 'Premium Australian wool felt — best option for branding and personalization.', brandable: true },
 ];
 
 export const HOURS_OPTIONS = [2, 3, 4];
-
 export const HAT_SIZES = ['XS', 'S', 'M', 'L', 'XL', 'XXL'];
 
 export interface AddOn {
@@ -84,12 +52,7 @@ export interface AddOn {
 
 export const SERVICE_ADDONS: AddOn[] = [
   { id: 'branding', label: 'Branding & burning station', price: 150 },
-  {
-    id: 'travel',
-    label: 'Travel outside DFW area',
-    price: 75,
-    note: 'Requires a minimum of 10 guests.',
-  },
+  { id: 'travel', label: 'Travel outside DFW area', price: 75, note: 'Requires a minimum of 10 guests.' },
 ];
 
 export interface CustomAddOn {
@@ -100,24 +63,9 @@ export interface CustomAddOn {
 }
 
 export const CUSTOM_ADDONS: CustomAddOn[] = [
-  {
-    id: 'leather-band',
-    label: 'Leather band, personalized branding',
-    pricePerGuest: 15,
-    priceLabel: '$15 / guest',
-  },
-  {
-    id: 'cards',
-    label: 'Playing cards with custom initials or logo',
-    pricePerGuest: 5,
-    priceLabel: '$5 / guest',
-  },
-  {
-    id: 'hat-clip',
-    label: 'Leather hat clip, personalized',
-    pricePerGuest: 15,
-    priceLabel: '$15 / guest',
-  },
+  { id: 'leather-band', label: 'Leather band, personalized branding', pricePerGuest: 15, priceLabel: '$15 / guest' },
+  { id: 'cards', label: 'Playing cards with custom initials or logo', pricePerGuest: 5, priceLabel: '$5 / guest' },
+  { id: 'hat-clip', label: 'Leather hat clip, personalized', pricePerGuest: 15, priceLabel: '$15 / guest' },
 ];
 
 export function getTeamSize(guests: number): number {
@@ -137,6 +85,9 @@ export function recommendedHours(guests: number): number {
 export interface QuoteState {
   eventType: string;
   budgetTierId: string;
+  selectedHatId: string;
+  selectedHatPrice: number;
+  selectedHatName: string;
   guests: number;
   hours: number;
   eventDate: string;
@@ -157,24 +108,21 @@ export interface QuoteBreakdown {
   deposit: number;
   hasCustom: boolean;
   perPersonCharged: boolean;
+  selectedHatName: string;
+  selectedHatPrice: number;
 }
 
 export function computeQuote(state: QuoteState): QuoteBreakdown {
   const hatTier = BUDGET_TIERS.find((t) => t.id === state.budgetTierId) || BUDGET_TIERS[0];
   const teamSize = getTeamSize(state.guests);
   const perPersonCharged = !NO_PER_PERSON_EVENT_TYPES.includes(state.eventType);
-  const hatTotal = perPersonCharged ? hatTier.value * state.guests : 0;
+  const hatPrice = state.selectedHatPrice > 0 ? state.selectedHatPrice : hatTier.value;
+  const hatTotal = perPersonCharged ? hatPrice * state.guests : 0;
   const stylistTotal = teamSize * STYLIST_HOURLY_RATE * state.hours;
-  const addonsTotal = SERVICE_ADDONS.filter((a) =>
-    state.serviceAddons.includes(a.id)
-  ).reduce((sum, a) => sum + a.price, 0);
-  const customAddonsTotal = CUSTOM_ADDONS.filter((a) =>
-    state.customAddons.includes(a.id)
-  ).reduce((sum, a) => sum + a.pricePerGuest * state.guests, 0);
+  const addonsTotal = SERVICE_ADDONS.filter((a) => state.serviceAddons.includes(a.id)).reduce((sum, a) => sum + a.price, 0);
+  const customAddonsTotal = CUSTOM_ADDONS.filter((a) => state.customAddons.includes(a.id)).reduce((sum, a) => sum + a.pricePerGuest * state.guests, 0);
   const total = hatTotal + stylistTotal + addonsTotal + customAddonsTotal;
-  const deposit = perPersonCharged
-    ? DEPOSIT_PER_GUEST * state.guests
-    : Math.round(total / 2);
+  const deposit = perPersonCharged ? DEPOSIT_PER_GUEST * state.guests : Math.round(total / 2);
   return {
     hatTier,
     teamSize,
@@ -186,6 +134,8 @@ export function computeQuote(state: QuoteState): QuoteBreakdown {
     deposit,
     hasCustom: state.customAddons.length > 0,
     perPersonCharged,
+    selectedHatName: state.selectedHatName || hatTier.title,
+    selectedHatPrice: hatPrice,
   };
 }
 
