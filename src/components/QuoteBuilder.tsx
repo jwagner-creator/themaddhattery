@@ -320,16 +320,13 @@ const QuoteBuilder: React.FC<QuoteBuilderProps> = ({ onRequestQuote, onPayDeposi
                 </p>
               )}
 
-              <button onClick={() => onPayDeposit(detailsPayload())}
-                className="w-full mt-6 rounded-full bg-[#c9a36a] hover:bg-[#b8915a] text-[#2a2018] font-semibold py-3.5 transition-colors">
-                Pay deposit {money(breakdown.deposit)}
-              </button>
+          
               <button onClick={() => onRequestQuote(detailsPayload())}
-                className="w-full mt-3 rounded-full border border-[#c9a36a]/50 text-[#f3ead9] hover:bg-white/5 font-semibold py-3 transition-colors">
+                className="w-full mt-6 rounded-full border border-[#c9a36a]/50 text-[#f3ead9] hover:bg-white/5 font-semibold py-3 transition-colors">
                 Get this as a quote
               </button>
               <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer"
-                className="block text-center mt-3 text-sm text-[#cbbfa9] hover:text-[#c9a36a] underline underline-offset-4 transition-colors">
+                className="block text-center mt-6 text-sm text-[#cbbfa9] hover:text-[#c9a36a] underline underline-offset-4 transition-colors">
                 Or schedule a consultation
               </a>
 
