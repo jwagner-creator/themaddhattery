@@ -20,7 +20,7 @@ import {
 } from '@/lib/customBases';
 import GalleryPickerModal from '@/components/GalleryPickerModal';
 
-const BUCKET = 'hat-bar-images';
+const BUCKET = 'hat-bar-images'; // v3
 
 const SIZE_CHOICES = [
   { id: 'os', label: 'O/S — One Size' },
