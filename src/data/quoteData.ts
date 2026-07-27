@@ -23,7 +23,6 @@ export const EVENT_TYPES: EventType[] = [
 
 export const NO_PER_PERSON_EVENT_TYPES = ['host-sponsored-guest-paid'];
 
-// Keep BudgetTier for backward compatibility but we now use hat selection
 export interface BudgetTier {
   id: string;
   range: string;
@@ -60,12 +59,42 @@ export interface CustomAddOn {
   label: string;
   pricePerGuest: number;
   priceLabel: string;
+  note?: string;
 }
 
 export const CUSTOM_ADDONS: CustomAddOn[] = [
-  { id: 'leather-band', label: 'Leather band, personalized branding', pricePerGuest: 15, priceLabel: '$15 / guest' },
-  { id: 'cards', label: 'Playing cards with custom initials or logo', pricePerGuest: 5, priceLabel: '$5 / guest' },
-  { id: 'hat-clip', label: 'Leather hat clip, personalized', pricePerGuest: 15, priceLabel: '$15 / guest' },
+  {
+    id: 'hat-bar-pp',
+    label: 'Hat Bar package',
+    pricePerGuest: 20,
+    priceLabel: '$20 / guest',
+    note: 'Includes hat bands, suede trim, feathers, hat pins, playing cards, matches & poker chips.',
+  },
+  {
+    id: 'leather-band',
+    label: 'Leather or suede hat band',
+    pricePerGuest: 10,
+    priceLabel: '$10 / guest',
+  },
+  {
+    id: 'cowhide-suede',
+    label: 'Cowhide & suede swatches, personalized branding',
+    pricePerGuest: 5,
+    priceLabel: '$5 / guest',
+    note: 'Great for faux hats that are not brandable.',
+  },
+  {
+    id: 'cards',
+    label: 'Playing cards with custom initials or logo',
+    pricePerGuest: 5,
+    priceLabel: '$5 / guest',
+  },
+  {
+    id: 'hat-clip',
+    label: 'Leather hat clip, personalized',
+    pricePerGuest: 15,
+    priceLabel: '$15 / guest',
+  },
 ];
 
 export function getTeamSize(guests: number): number {
@@ -122,7 +151,7 @@ export function computeQuote(state: QuoteState): QuoteBreakdown {
   const addonsTotal = SERVICE_ADDONS.filter((a) => state.serviceAddons.includes(a.id)).reduce((sum, a) => sum + a.price, 0);
   const customAddonsTotal = CUSTOM_ADDONS.filter((a) => state.customAddons.includes(a.id)).reduce((sum, a) => sum + a.pricePerGuest * state.guests, 0);
   const total = hatTotal + stylistTotal + addonsTotal + customAddonsTotal;
-  const deposit = perPersonCharged ? DEPOSIT_PER_GUEST * state.guests : Math.round(total / 2);
+  const deposit = Math.round(total / 2);
   return {
     hatTier,
     teamSize,
