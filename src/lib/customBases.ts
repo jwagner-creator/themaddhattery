@@ -2,7 +2,7 @@ import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/lib/supabase';
 import { HAT_BASES, type HatBase, type HatColorOption } from '@/data/hatDesign';
 
-const TABLE = 'design_bases';
+const TABLE = 'design_bases'; // v3
 
 export interface CustomBaseRow {
   id: string;
