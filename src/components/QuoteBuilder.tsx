@@ -233,24 +233,24 @@ const QuoteBuilder: React.FC<QuoteBuilderProps> = ({ onRequestQuote, onPayDeposi
               )}
             </Section>
 
-            {/* Service add-ons */}
-            <Section step="06" title="Service add-ons">
-              <div className="space-y-2">
-                {SERVICE_ADDONS.map(a => {
-                  const active = state.serviceAddons.includes(a.id);
-                  return (
-                    <button key={a.id} onClick={() => toggle('serviceAddons', a.id)}
-                      className={`w-full flex items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors ${active ? 'border-[#c9a36a] bg-[#faf3e6]' : 'border-[#e0d4c0] hover:border-[#c9a36a]'}`}>
-                      <span>
-                        <span className="font-medium text-[#2a2018]">{a.label}</span>
-                        {a.note && <span className="block text-xs text-[#7a6e5c]">{a.note}</span>}
-                      </span>
-                      <span className="font-semibold text-[#2a2018] ml-3">+{money(a.price)}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </Section>
+        {/* Service add-ons */}
+<Section step="06" title="Service add-ons">
+  <div className="space-y-2">
+    {SERVICE_ADDONS.map(a => {
+      const active = state.serviceAddons.includes(a.id);
+      return (
+        <button key={a.id} onClick={() => toggle('serviceAddons', a.id)}
+          className={`w-full flex items-center justify-between rounded-lg border px-4 py-3 text-left transition-colors ${active ? 'border-[#c9a36a] bg-[#faf3e6]' : 'border-[#e0d4c0] hover:border-[#c9a36a]'}`}>
+          <span>
+            <span className="font-medium text-[#2a2018]">{a.label}</span>
+            {a.note && <span className="block text-xs text-[#7a6e5c]">{a.note}</span>}
+          </span>
+          <span className="font-semibold text-[#2a2018] ml-3">+{money(a.price)}</span>
+        </button>
+      );
+    })}
+  </div>
+</Section>
 
             {/* Custom add-ons */}
             <Section step="07" title="Custom add-ons" sub="Priced per guest and added straight into your estimated total.">
@@ -308,7 +308,7 @@ const QuoteBuilder: React.FC<QuoteBuilderProps> = ({ onRequestQuote, onPayDeposi
                 </div>
                 <div className="flex items-center justify-between mt-3 text-sm">
                   <span className="text-[#cbbfa9]">
-                    {breakdown.perPersonCharged ? 'Deposit due today ($50/guest)' : 'Deposit due today (50%)'}
+                  Deposit to book event (50% of total)
                   </span>
                   <span className="font-semibold text-[#c9a36a]">{money(breakdown.deposit)}</span>
                 </div>
