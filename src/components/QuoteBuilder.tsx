@@ -300,7 +300,7 @@ const QuoteBuilder: React.FC<QuoteBuilderProps> = ({ onRequestQuote, onPayDeposi
                 {breakdown.addonsTotal > 0 && <Row label="Service add-ons" value={money(breakdown.addonsTotal)} />}
                 {breakdown.customAddonsTotal > 0 && <Row label={`Custom add-ons (× ${state.guests})`} value={money(breakdown.customAddonsTotal)} />}
               </div>
-
+{breakdown.taxTotal > 0 && <Row label="Sales tax (8.25%)" value={money(breakdown.taxTotal)} />}
               <div className="border-t border-white/15 mt-5 pt-5">
                 <div className="flex items-baseline justify-between">
                   <span className="text-[#cbbfa9]">Estimated total</span>
