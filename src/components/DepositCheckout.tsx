@@ -71,7 +71,31 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
       /* best effort — never block the user */
     }
 
-    setStatus('done');
+  // Send email notification
+      try {
+        await fetch('https://hystlehjwpagcktoyoia.supabase.co/functions/v1/event-quote-email', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            lead: {
+              name,
+              email,
+              phone,
+              event_type: eventTypeLabel,
+              event_date: eventDate,
+              guests,
+              estimated_total: money(breakdown.total),
+              deposit: money(breakdown.deposit),
+              notes,
+            },
+          }),
+        });
+      } catch {
+        // Non-blocking
+      }
+
+      setStatus('done');
+  };
   };
 
   return (
