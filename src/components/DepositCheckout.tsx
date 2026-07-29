@@ -200,11 +200,12 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
                     Text me about my event. Msg &amp; data rates may apply. Reply STOP to unsubscribe.
                   </span>
                 </label>
-                <button
-                  type="submit"
-                  disabled={status === 'loading'}
-                  className="w-full rounded-full bg-[#2a2018] hover:bg-[#3a2e22] text-[#f3ead9] font-semibold py-3.5 transition-colors disabled:opacity-60"
-                >
+               <button
+  type="submit"
+  disabled={status === 'loading'}
+  className="w-full rounded-full bg-[#2a2018] hover:bg-[#3a2e22] text-[#f3ead9] font-semibold py-3.5 transition-colors disabled:opacity-60"
+>
+
                   {status === 'loading' ? 'Saving…' : 'Send my quote & schedule a consultation'}
                 </button>
               </form>
