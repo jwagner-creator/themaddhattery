@@ -6,7 +6,7 @@ export const BOOKING_URL =
 
 export const STYLIST_HOURLY_RATE = 25;
 export const DEPOSIT_PER_GUEST = 50;
-
+export const SALES_TAX_RATE = 0.0825;
 export interface EventType {
   id: string;
   label: string;
@@ -150,7 +150,9 @@ export function computeQuote(state: QuoteState): QuoteBreakdown {
   const stylistTotal = teamSize * STYLIST_HOURLY_RATE * state.hours;
   const addonsTotal = SERVICE_ADDONS.filter((a) => state.serviceAddons.includes(a.id)).reduce((sum, a) => sum + a.price, 0);
   const customAddonsTotal = CUSTOM_ADDONS.filter((a) => state.customAddons.includes(a.id)).reduce((sum, a) => sum + a.pricePerGuest * state.guests, 0);
-  const total = hatTotal + stylistTotal + addonsTotal + customAddonsTotal;
+  const subtotal = hatTotal + stylistTotal + addonsTotal + customAddonsTotal;
+  const taxTotal = Math.round(subtotal * SALES_TAX_RATE);
+  const total = subtotal + taxTotal;
   const deposit = Math.round(total / 2);
   return {
     hatTier,
