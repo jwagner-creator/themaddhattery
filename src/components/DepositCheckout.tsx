@@ -74,7 +74,7 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
 
     // Send email notification
     try {
-      await fetch(`${EDGE_URL}/event-quote-email`, {
+      fetch(`${EDGE_URL}/event-quote-email`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
