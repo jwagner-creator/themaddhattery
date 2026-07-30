@@ -74,9 +74,12 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
 
     // Send email notification
     try {
-      await fetch(`${EDGE_URL}/event-quote-email`, {
+   await fetch(`${EDGE_URL}/event-quote-email`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imh5c3RsZWhqd3BhZ2NrdG95b2lhIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIyNjY5MDUsImV4cCI6MjA5Nzg0MjkwNX0.XE3XIxkuJLl5UNyD7L8RH7knNK8_sSZv1qdEg1a0zvs',
+        },
         body: JSON.stringify({
           lead: {
             name,
