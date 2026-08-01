@@ -73,7 +73,7 @@ const WholesaleApplyPage: React.FC = () => {
 
     // Trigger confirmation emails
     try {
-      await fetch(`${EDGE_URL}/wholesale-application-email`, {
+     await fetch(`${EDGE_URL}/wholesale-application-email-ts`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
