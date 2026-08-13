@@ -298,7 +298,7 @@ const QuoteBuilder: React.FC<QuoteBuilderProps> = ({ onRequestQuote, onPayDeposi
                 <Row label={`Stylist team (${breakdown.teamSize})`} value={money(breakdown.stylistTotal)} />
                 {breakdown.addonsTotal > 0 && <Row label="Service add-ons" value={money(breakdown.addonsTotal)} />}
                 {breakdown.customAddonsTotal > 0 && <Row label={`Custom add-ons (× ${state.guests})`} value={money(breakdown.customAddonsTotal)} />}
-                {breakdown.taxTotal > 0 && <Row label="Sales tax (8.25%)" value={money(breakdown.taxTotal)} />}
+                {breakdown.taxTotal > 0 && <Row label="Sales tax (6.25%)" value={money(breakdown.taxTotal)} />}
               </div>
 
               <div className="border-t border-white/15 mt-5 pt-5">
