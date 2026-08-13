@@ -6,7 +6,7 @@ export const BOOKING_URL =
 
 export const STYLIST_HOURLY_RATE = 25;
 export const DEPOSIT_PER_GUEST = 50;
-export const SALES_TAX_RATE = 0.0825;
+export const SALES_TAX_RATE = 0.0625;
 
 export interface EventType {
   id: string;
