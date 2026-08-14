@@ -52,4 +52,4 @@ export interface AddOn {
 
 export const SERVICE_ADDONS: AddOn[] = [
   { id: 'branding', label: 'Branding & burning station', price: 150 },
-  { id: 'travel', label: 'Travel outside DFW area', price: 75, note: 'Requires a
+  { id: 'travel', label: 'Travel outside DFW area', price: 75, note: 'Requires a minimum of 10 guests.' },
