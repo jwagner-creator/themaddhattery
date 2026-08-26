@@ -17,10 +17,10 @@ import {
   type CustomBaseRow,
 } from '@/lib/customBases';
 import GalleryPickerModal from '@/components/GalleryPickerModal';
-
+ 
 const BUCKET = 'hat-bar-images';
 const BUILD = 'v4-multicolor';
-
+ 
 const SIZE_CHOICES = [
   { id: 'os', label: 'O/S — One Size' },
   { id: 's', label: 'S' },
@@ -30,14 +30,14 @@ const SIZE_CHOICES = [
   { id: 'sm-md', label: 'S/M' },
   { id: 'lg-xl', label: 'L/XL' },
 ];
-
+ 
 interface ColorEntry {
   id: string;
   name: string;
   color: string;
   image?: string;
 }
-
+ 
 const AddBasesManager: React.FC<{
   flash: (type: 'ok' | 'err', text: string) => void;
 }> = ({ flash }) => {
@@ -57,10 +57,10 @@ const AddBasesManager: React.FC<{
   const [newColorImage, setNewColorImage] = useState('');
   const [uploadingColor, setUploadingColor] = useState(false);
   const [editingColorIndex, setEditingColorIndex] = useState<number | null>(null);
-
+ 
   const load = () => fetchCustomBaseRows().then(setRows);
   useEffect(() => { load(); }, []);
-
+ 
   const toggleSize = (id: string) => {
     setSelectedSizes(prev => {
       if (id === 'os') return ['os'];
@@ -70,7 +70,7 @@ const AddBasesManager: React.FC<{
         : [...withoutOs, id];
     });
   };
-
+ 
   const uploadImage = async (file: File, prefix: string): Promise<string> => {
     if (!file.type.startsWith('image/')) { flash('err', 'Please choose an image file.'); return ''; }
     const ext = file.name.split('.').pop() || 'jpg';
@@ -79,7 +79,7 @@ const AddBasesManager: React.FC<{
     if (error) { flash('err', `Upload failed: ${error.message}`); return ''; }
     return supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
   };
-
+ 
   const onPickMain = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (mainFileRef.current) mainFileRef.current.value = '';
@@ -89,7 +89,7 @@ const AddBasesManager: React.FC<{
     setUploading(false);
     if (url) { setImageUrl(url); flash('ok', 'Main photo uploaded!'); }
   };
-
+ 
   const onPickColorImage = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (colorFileRef.current) colorFileRef.current.value = '';
@@ -99,7 +99,7 @@ const AddBasesManager: React.FC<{
     setUploadingColor(false);
     if (url) setNewColorImage(url);
   };
-
+ 
   const addColor = () => {
     if (!newColorName.trim()) { flash('err', 'Please enter a color name.'); return; }
     const colorId = newColorName.toLowerCase().replace(/\s+/g, '-');
@@ -112,15 +112,15 @@ const AddBasesManager: React.FC<{
     }
     setNewColorName(''); setNewColorHex('#c9a87c'); setNewColorImage('');
   };
-
+ 
   const editColor = (i: number) => {
     const c = colors[i];
     setNewColorName(c.name); setNewColorHex(c.color); setNewColorImage(c.image || '');
     setEditingColorIndex(i);
   };
-
+ 
   const removeColor = (i: number) => setColors(prev => prev.filter((_, idx) => idx !== i));
-
+ 
   const add = async () => {
     if (!name.trim()) { flash('err', 'Please give the hat a name.'); return; }
     if (!imageUrl) { flash('err', 'Please upload a main photo for the hat.'); return; }
@@ -141,13 +141,13 @@ const AddBasesManager: React.FC<{
     load();
     flash('ok', `Added "${created.name}" to the designer.`);
   };
-
+ 
   const remove = async (id: string, label: string) => {
     const ok = await deleteCustomBase(id);
     if (ok) { setRows(prev => prev.filter(r => r.id !== id)); flash('ok', `Removed "${label}".`); }
     else flash('err', 'Could not remove the hat.');
   };
-
+ 
   return (
     <div className="mb-12">
       <h2 className="font-serif text-2xl mb-2">Add a new base hat</h2>
@@ -155,7 +155,7 @@ const AddBasesManager: React.FC<{
         Upload a main photo, add color options with individual photos, choose sizes, and it shows up
         instantly in the hat configurator. Build: {BUILD}
       </p>
-
+ 
       <div className="rounded-2xl bg-[#3a2e22] border border-[#4a3c2e] p-5 space-y-5">
         <div className="grid sm:grid-cols-[180px_1fr] gap-5">
           <div>
@@ -172,7 +172,7 @@ const AddBasesManager: React.FC<{
               {uploading ? 'Uploading…' : imageUrl ? 'Replace main photo' : 'Upload main photo'}
             </button>
           </div>
-
+ 
           <div className="space-y-3">
             <input type="text" placeholder="Hat name (e.g. Bangora Western)" value={name} onChange={e => setName(e.target.value)}
               className="w-full rounded-lg bg-[#2a2018] border border-[#4a3c2e] text-[#f3ead9] placeholder-[#9a8d77] px-4 py-2.5 focus:outline-none focus:border-[#c9a36a]" />
@@ -197,12 +197,12 @@ const AddBasesManager: React.FC<{
             </div>
           </div>
         </div>
-
+ 
         <div className="border-t border-[#4a3c2e] pt-5">
           <p className="text-xs uppercase tracking-wider text-[#9a8d77] mb-3">
             Color options <span className="normal-case font-normal">(optional — add one per color variation)</span>
           </p>
-
+ 
           {colors.length > 0 && (
             <div className="flex flex-wrap gap-3 mb-4">
               {colors.map((c, i) => (
@@ -225,7 +225,7 @@ const AddBasesManager: React.FC<{
               ))}
             </div>
           )}
-
+ 
           <div className="bg-[#241c14] rounded-xl p-4 space-y-3">
             <p className="text-xs text-[#9a8d77]">{editingColorIndex !== null ? 'Edit color' : 'Add a color'}</p>
             <div className="grid sm:grid-cols-3 gap-3">
@@ -268,13 +268,13 @@ const AddBasesManager: React.FC<{
             </div>
           </div>
         </div>
-
+ 
         <button type="button" disabled={saving} onClick={add}
           className="rounded-full bg-[#c9a36a] hover:bg-[#b8915a] text-[#2a2018] font-semibold text-sm px-8 py-3 transition-colors disabled:opacity-50">
           {saving ? 'Adding hat…' : 'Save new hat to configurator'}
         </button>
       </div>
-
+ 
       {rows.length > 0 && (
         <div className="mt-6">
           <p className="text-sm text-[#9a8d77] mb-3">Your added hats</p>
@@ -282,6 +282,7 @@ const AddBasesManager: React.FC<{
             {rows.map(r => (
               <CustomBaseCard key={r.id} row={r} flash={flash}
                 onUpdated={(id, image) => setRows(prev => prev.map(x => x.id === id ? { ...x, image } : x))}
+                onEdited={(id, patch) => setRows(prev => prev.map(x => x.id === id ? { ...x, ...patch } : x))}
                 onRemove={() => remove(r.id, r.name)} />
             ))}
           </div>
@@ -290,23 +291,48 @@ const AddBasesManager: React.FC<{
     </div>
   );
 };
-
+ 
 const CustomBaseCard: React.FC<{
   row: CustomBaseRow;
   flash: (type: 'ok' | 'err', text: string) => void;
   onUpdated: (id: string, image: string) => void;
   onRemove: () => void;
-}> = ({ row, flash, onUpdated, onRemove }) => {
+  onEdited: (id: string, patch: Partial<CustomBaseRow>) => void;
+}> = ({ row, flash, onUpdated, onRemove, onEdited }) => {
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [uploadingColorIdx, setUploadingColorIdx] = useState<number | null>(null);
-
+  const [editOpen, setEditOpen] = useState(false);
+  const [editName, setEditName] = useState(row.name);
+  const [editRange, setEditRange] = useState(row.range || '');
+  const [editDescription, setEditDescription] = useState(row.description || '');
+  const [editSizes, setEditSizes] = useState<string[]>(row.sizes || ['os']);
+  const [saving, setSaving] = useState(false);
+ 
+  const toggleSize = (id: string) => {
+    setEditSizes(prev => {
+      if (id === 'os') return ['os'];
+      const withoutOs = prev.filter(s => s !== 'os');
+      return withoutOs.includes(id) ? withoutOs.filter(s => s !== id) : [...withoutOs, id];
+    });
+  };
+ 
+  const saveEdit = async () => {
+    if (!editName.trim()) { flash('err', 'Hat name is required.'); return; }
+    setSaving(true);
+    const patch = { name: editName.trim(), range: editRange.trim(), description: editDescription.trim(), sizes: editSizes };
+    const ok = await updateCustomBase(row.id, patch);
+    setSaving(false);
+    if (ok) { onEdited(row.id, patch); setEditOpen(false); flash('ok', `Updated "${editName}".`); }
+    else flash('err', 'Could not save changes.');
+  };
+ 
   const uploadImage = async (file: File, path: string): Promise<string> => {
     const { error } = await supabase.storage.from(BUCKET).upload(path, file, { cacheControl: '3600', upsert: true });
     if (error) { flash('err', 'Upload failed. Please try again.'); return ''; }
     return supabase.storage.from(BUCKET).getPublicUrl(path).data.publicUrl;
   };
-
+ 
   const onPickMain = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (fileRef.current) fileRef.current.value = '';
@@ -320,7 +346,7 @@ const CustomBaseCard: React.FC<{
     }
     setBusy(false);
   };
-
+ 
   const onPickColorImage = (colorIndex: number) => async (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (!f) return;
@@ -334,56 +360,115 @@ const CustomBaseCard: React.FC<{
     }
     setUploadingColorIdx(null);
   };
-
+ 
   return (
-    <div className="rounded-2xl overflow-hidden bg-[#3a2e22] border border-[#4a3c2e]">
-      <div className="relative aspect-square overflow-hidden bg-[#241c14]">
-        <img key={row.image} src={row.image} alt={row.name} className="w-full h-full object-cover" />
-        {busy && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-sm text-white">Working…</div>
-        )}
-      </div>
-      <div className="p-4">
-        <p className="text-sm font-medium text-[#f3ead9] leading-tight">{row.name}</p>
-        {row.range && <p className="text-xs text-[#c9a36a] mt-0.5">{row.range}</p>}
-        {row.sizes && row.sizes.length > 0 && (
-          <p className="text-xs text-[#9a8d77] mt-0.5">Sizes: {row.sizes.join(', ').toUpperCase()}</p>
-        )}
-        {row.colors && row.colors.length > 0 && (
-          <div className="mt-3">
-            <p className="text-[10px] uppercase tracking-wider text-[#9a8d77] mb-2">Colors</p>
-            <div className="space-y-2">
-              {row.colors.map((c, i) => (
-                <div key={i} className="flex items-center gap-2">
-                  {c.image ? (
-                    <img src={c.image} alt={c.name} className="w-8 h-8 rounded-lg object-cover flex-shrink-0" />
-                  ) : (
-                    <div className="w-8 h-8 rounded-lg border border-[#5a4a37] flex-shrink-0" style={{ background: c.color }} />
-                  )}
-                  <span className="text-xs text-[#cbbfa9] flex-1">{c.name}</span>
-                  <label className="cursor-pointer text-[10px] text-[#c9a36a] hover:underline flex-shrink-0">
-                    {uploadingColorIdx === i ? 'Uploading…' : c.image ? 'Replace' : 'Add photo'}
-                    <input type="file" accept="image/*" className="hidden" onChange={onPickColorImage(i)} />
-                  </label>
+    <>
+      {/* Edit modal */}
+      {editOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/60" onClick={() => setEditOpen(false)} />
+          <div className="relative bg-[#2a2018] border border-[#4a3c2e] rounded-2xl p-6 w-full max-w-md shadow-2xl">
+            <h3 className="font-serif text-xl text-[#f3ead9] mb-4">Edit hat</h3>
+            <div className="space-y-3">
+              <div>
+                <label className="block text-xs text-[#9a8d77] mb-1">Hat name *</label>
+                <input value={editName} onChange={e => setEditName(e.target.value)}
+                  className="w-full rounded-lg bg-[#1f1812] border border-[#4a3c2e] text-[#f3ead9] px-4 py-2.5 outline-none focus:border-[#c9a36a]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#9a8d77] mb-1">Price range</label>
+                <input value={editRange} onChange={e => setEditRange(e.target.value)}
+                  placeholder="e.g. $77"
+                  className="w-full rounded-lg bg-[#1f1812] border border-[#4a3c2e] text-[#f3ead9] px-4 py-2.5 outline-none focus:border-[#c9a36a]" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#9a8d77] mb-1">Description</label>
+                <textarea value={editDescription} onChange={e => setEditDescription(e.target.value)}
+                  rows={2} className="w-full rounded-lg bg-[#1f1812] border border-[#4a3c2e] text-[#f3ead9] px-4 py-2.5 outline-none focus:border-[#c9a36a] resize-none" />
+              </div>
+              <div>
+                <label className="block text-xs text-[#9a8d77] mb-2">Sizes</label>
+                <div className="flex flex-wrap gap-2">
+                  {SIZE_CHOICES.map(s => {
+                    const selected = editSizes.includes(s.id);
+                    return (
+                      <button key={s.id} type="button" onClick={() => toggleSize(s.id)}
+                        className={`rounded-full px-3 py-1 text-xs font-medium border transition-colors ${selected ? 'bg-[#c9a36a] border-[#c9a36a] text-[#2a2018]' : 'border-[#5a4a37] text-[#cbbfa9] hover:border-[#c9a36a]'}`}>
+                        {s.label}
+                      </button>
+                    );
+                  })}
                 </div>
-              ))}
+              </div>
+              <div className="flex gap-2 pt-2">
+                <button onClick={saveEdit} disabled={saving}
+                  className="flex-1 rounded-full bg-[#c9a36a] hover:bg-[#b8915a] text-[#2a2018] font-semibold py-2.5 text-sm transition-colors disabled:opacity-50">
+                  {saving ? 'Saving…' : 'Save changes'}
+                </button>
+                <button onClick={() => setEditOpen(false)}
+                  className="rounded-full border border-[#5a4a37] text-[#cbbfa9] px-5 py-2.5 text-sm hover:bg-[#3a2e22]">
+                  Cancel
+                </button>
+              </div>
             </div>
           </div>
-        )}
-        <input ref={fileRef} type="file" accept="image/*" onChange={onPickMain} className="hidden" />
-        <button type="button" disabled={busy} onClick={() => fileRef.current?.click()}
-          className="mt-3 w-full rounded-full bg-[#c9a36a] hover:bg-[#b8915a] text-[#2a2018] font-semibold text-sm py-2 transition-colors disabled:opacity-50">
-          {busy ? 'Working…' : 'Change main photo'}
-        </button>
-        <button type="button" disabled={busy} onClick={onRemove}
-          className="mt-2 w-full rounded-full border border-[#5a4a37] text-[#cbbfa9] text-sm py-2 hover:bg-[#2a2018] transition-colors disabled:opacity-50">
-          Remove hat
-        </button>
+        </div>
+      )}
+ 
+      <div className="rounded-2xl overflow-hidden bg-[#3a2e22] border border-[#4a3c2e]">
+        <div className="relative aspect-square overflow-hidden bg-[#241c14]">
+          <img key={row.image} src={row.image} alt={row.name} className="w-full h-full object-cover" />
+          {busy && (
+            <div className="absolute inset-0 flex items-center justify-center bg-black/50 text-sm text-white">Working…</div>
+          )}
+        </div>
+        <div className="p-4">
+          <p className="text-sm font-medium text-[#f3ead9] leading-tight">{row.name}</p>
+          {row.range && <p className="text-xs text-[#c9a36a] mt-0.5">{row.range}</p>}
+          {row.sizes && row.sizes.length > 0 && (
+            <p className="text-xs text-[#9a8d77] mt-0.5">Sizes: {row.sizes.join(', ').toUpperCase()}</p>
+          )}
+          {row.colors && row.colors.length > 0 && (
+            <div className="mt-3">
+              <p className="text-[10px] uppercase tracking-wider text-[#9a8d77] mb-2">Colors</p>
+              <div className="space-y-2">
+                {row.colors.map((c, i) => (
+                  <div key={i} className="flex items-center gap-2">
+                    {c.image ? (
+                      <img src={c.image} alt={c.name} className="w-8 h-8 rounded-lg object-cover flex-shrink-0" />
+                    ) : (
+                      <div className="w-8 h-8 rounded-lg border border-[#5a4a37] flex-shrink-0" style={{ background: c.color }} />
+                    )}
+                    <span className="text-xs text-[#cbbfa9] flex-1">{c.name}</span>
+                    <label className="cursor-pointer text-[10px] text-[#c9a36a] hover:underline flex-shrink-0">
+                      {uploadingColorIdx === i ? 'Uploading…' : c.image ? 'Replace' : 'Add photo'}
+                      <input type="file" accept="image/*" className="hidden" onChange={onPickColorImage(i)} />
+                    </label>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          <input ref={fileRef} type="file" accept="image/*" onChange={onPickMain} className="hidden" />
+          <button type="button" onClick={() => setEditOpen(true)}
+            className="mt-3 w-full rounded-full bg-[#5a4a37] hover:bg-[#6a5a47] text-[#f3ead9] font-semibold text-sm py-2 transition-colors">
+            Edit details
+          </button>
+          <button type="button" disabled={busy} onClick={() => fileRef.current?.click()}
+            className="mt-2 w-full rounded-full bg-[#c9a36a] hover:bg-[#b8915a] text-[#2a2018] font-semibold text-sm py-2 transition-colors disabled:opacity-50">
+            {busy ? 'Working…' : 'Change main photo'}
+          </button>
+          <button type="button" disabled={busy} onClick={onRemove}
+            className="mt-2 w-full rounded-full border border-[#5a4a37] text-[#cbbfa9] text-sm py-2 hover:bg-[#2a2018] transition-colors disabled:opacity-50">
+            Remove hat
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
-
+ 
+ 
 const SlotCard: React.FC<{
   slot: DesignSlot;
   url: string;
@@ -394,7 +479,7 @@ const SlotCard: React.FC<{
   const [busy, setBusy] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const overridden = url !== slot.defaultUrl;
-
+ 
   const upload = async (file: File) => {
     if (!file.type.startsWith('image/')) { flash('err', 'Please choose an image file.'); return; }
     setBusy(true);
@@ -408,13 +493,13 @@ const SlotCard: React.FC<{
     if (ok) { onChanged(slot.key, publicUrl); flash('ok', `Updated "${slot.label}". Now live.`); }
     else flash('err', 'Photo uploaded but could not be saved. Please try again.');
   };
-
+ 
   const onPick = (e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (f) upload(f);
     if (fileRef.current) fileRef.current.value = '';
   };
-
+ 
   const pickFromGallery = async (galleryUrl: string) => {
     setBusy(true);
     const ok = await saveDesignImage(slot.key, galleryUrl);
@@ -422,7 +507,7 @@ const SlotCard: React.FC<{
     if (ok) { onChanged(slot.key, galleryUrl); flash('ok', `Swapped "${slot.label}" to gallery photo.`); }
     else flash('err', 'Could not save the gallery photo. Please try again.');
   };
-
+ 
   const reset = async () => {
     setBusy(true);
     const ok = await resetDesignImage(slot.key);
@@ -430,7 +515,7 @@ const SlotCard: React.FC<{
     if (ok) { onChanged(slot.key, null); flash('ok', 'Reset to the default photo.'); }
     else flash('err', 'Could not reset the photo.');
   };
-
+ 
   return (
     <div className="rounded-2xl overflow-hidden bg-[#3a2e22] border border-[#4a3c2e]">
       <div className="relative aspect-square overflow-hidden bg-[#241c14]">
@@ -467,21 +552,21 @@ const SlotCard: React.FC<{
     </div>
   );
 };
-
+ 
 const AdminDesignImages: React.FC = () => {
   const [overrides, setOverrides] = useState<DesignImageMap>({});
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState<{ type: 'ok' | 'err'; text: string } | null>(null);
-
+ 
   const flash = (type: 'ok' | 'err', text: string) => {
     setMessage({ type, text });
     setTimeout(() => setMessage(null), 4000);
   };
-
+ 
   useEffect(() => {
     fetchDesignImages().then(m => { setOverrides(m); setLoading(false); });
   }, []);
-
+ 
   const onChanged = (slotKey: string, url: string | null) => {
     setOverrides(prev => {
       const next = { ...prev };
@@ -490,10 +575,10 @@ const AdminDesignImages: React.FC = () => {
       return next;
     });
   };
-
+ 
   const bases = DESIGN_SLOTS.filter(s => s.group === 'base');
   const looks = DESIGN_SLOTS.filter(s => s.group === 'look');
-
+ 
   const renderGroup = (title: string, slots: DesignSlot[]) => (
     <div className="mb-12">
       <h2 className="font-serif text-2xl mb-5">{title}</h2>
@@ -505,7 +590,7 @@ const AdminDesignImages: React.FC = () => {
       </div>
     </div>
   );
-
+ 
   return (
     <div className="min-h-screen bg-[#1f1812] text-[#f3ead9]">
       <div className="max-w-6xl mx-auto px-5 py-12">
@@ -526,13 +611,13 @@ const AdminDesignImages: React.FC = () => {
             </Link>
           </div>
         </div>
-
+ 
         {message && (
           <div className={`mb-6 rounded-xl px-4 py-3 text-sm ${message.type === 'ok' ? 'bg-green-900/40 text-green-200 border border-green-700/40' : 'bg-red-900/40 text-red-200 border border-red-700/40'}`}>
             {message.text}
           </div>
         )}
-
+ 
         {loading ? (
           <p className="text-[#cbbfa9]">Loading photos…</p>
         ) : (
@@ -551,5 +636,6 @@ const AdminDesignImages: React.FC = () => {
     </div>
   );
 };
-
+ 
 export default AdminDesignImages;
+ 
