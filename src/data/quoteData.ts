@@ -7,6 +7,7 @@ export const BOOKING_URL =
 export const STYLIST_HOURLY_RATE = 25;
 export const DEPOSIT_PER_GUEST = 50;
 export const SALES_TAX_RATE = 0.0625;
+export const TRAVEL_RATE_PER_STAFF = 100;
 
 export interface EventType {
   id: string;
@@ -47,12 +48,24 @@ export interface AddOn {
   id: string;
   label: string;
   price: number;
+  perStaff?: boolean;
   note?: string;
 }
 
 export const SERVICE_ADDONS: AddOn[] = [
-  { id: 'branding', label: 'Branding & burning station', price: 150 },
-  { id: 'travel', label: 'Travel outside DFW area', price: 75, note: 'Requires a minimum of 10 guests.' },
+  {
+    id: 'branding',
+    label: 'Branding & burning station',
+    price: 150,
+    note: 'Requires 1 brander per 25 guests (max 3 branders per event). For parties over 100 guests, additional time may be needed and will be reflected in your final invoice.',
+  },
+  {
+    id: 'travel',
+    label: 'Travel outside DFW area',
+    price: 100,
+    perStaff: true,
+    note: 'Priced at $100 per staff member based on your team size.',
+  },
 ];
 
 export interface CustomAddOn {
@@ -61,15 +74,32 @@ export interface CustomAddOn {
   pricePerGuest: number;
   priceLabel: string;
   note?: string;
+  maxGuests?: number;
 }
 
 export const CUSTOM_ADDONS: CustomAddOn[] = [
   {
-    id: 'hat-bar-pp',
-    label: 'Hat Bar package',
+    id: 'hat-bar-basic',
+    label: 'Hat Bar package — Basic',
     pricePerGuest: 20,
     priceLabel: '$20 / guest',
-    note: 'Includes hat bands, suede trim, feathers, hat pins, playing cards, matches & poker chips.',
+    note: 'Includes: 1 hat band, 1 layering band, feather bundle, 1 hat pin, playing card.',
+  },
+  {
+    id: 'hat-bar-premium',
+    label: 'Hat Bar package — Premium',
+    pricePerGuest: 40,
+    priceLabel: '$40 / guest',
+    note: 'Includes: feather, beaded & leather bands, expanded hat pin accessories, and more. Best for parties of 50 or less.',
+    maxGuests: 50,
+  },
+  {
+    id: 'hat-bar-unlimited',
+    label: 'Hat Bar package — Premium Unlimited',
+    pricePerGuest: 60,
+    priceLabel: '$60 / guest',
+    note: 'The ultimate hat bar experience — unlimited access to all bands, feathers, pins and accessories. Available for parties of 25 or less.',
+    maxGuests: 25,
   },
   {
     id: 'leather-band',
@@ -100,28 +130,28 @@ export const CUSTOM_ADDONS: CustomAddOn[] = [
     id: 'hat-brush',
     label: 'Hat brush',
     pricePerGuest: 10,
-    priceLabel: '$8-$12 / guest',
+    priceLabel: '$8–$12 / guest',
     note: 'Keeps hats looking their best.',
   },
   {
     id: 'canvas-tote',
     label: 'Canvas tote bag',
     pricePerGuest: 25,
-    priceLabel: '$15-$35 / guest',
+    priceLabel: '$15–$35 / guest',
     note: 'Great for carrying hat bar accessories.',
   },
   {
     id: 'satin-duster',
     label: 'Satin duster bag',
     pricePerGuest: 6,
-    priceLabel: '$5-$8 / guest',
+    priceLabel: '$5–$8 / guest',
     note: 'Protective storage bag for hats.',
   },
   {
     id: 'custom-logo',
     label: 'Custom logo or personalized option',
     pricePerGuest: 4,
-    priceLabel: '$3-$5 / guest',
+    priceLabel: '$3–$5 / guest',
     note: 'Custom branding or personalization per guest.',
   },
 ];
@@ -134,6 +164,10 @@ export function getTeamSize(guests: number): number {
   if (guests <= 400) return 6;
   if (guests <= 700) return 7;
   return 8;
+}
+
+export function getBranderCount(guests: number): number {
+  return Math.min(Math.ceil(guests / 25), 3);
 }
 
 export function recommendedHours(guests: number): number {
@@ -149,6 +183,9 @@ export interface QuoteState {
   guests: number;
   hours: number;
   eventDate: string;
+  eventLocation: string;
+  company: string;
+  flexibleDates: boolean;
   serviceAddons: string[];
   customAddons: string[];
   sizes: string[];
@@ -170,16 +207,25 @@ export interface QuoteBreakdown {
   perPersonCharged: boolean;
   selectedHatName: string;
   selectedHatPrice: number;
+  travelTotal: number;
+  branderCount: number;
 }
 
 export function computeQuote(state: QuoteState): QuoteBreakdown {
   const hatTier = BUDGET_TIERS.find((t) => t.id === state.budgetTierId) || BUDGET_TIERS[0];
   const teamSize = getTeamSize(state.guests);
+  const branderCount = state.serviceAddons.includes('branding') ? getBranderCount(state.guests) : 0;
   const perPersonCharged = !NO_PER_PERSON_EVENT_TYPES.includes(state.eventType);
   const hatPrice = state.selectedHatPrice > 0 ? state.selectedHatPrice : hatTier.value;
   const hatTotal = perPersonCharged ? hatPrice * state.guests : 0;
   const stylistTotal = teamSize * STYLIST_HOURLY_RATE * state.hours;
-  const addonsTotal = SERVICE_ADDONS.filter((a) => state.serviceAddons.includes(a.id)).reduce((sum, a) => sum + a.price, 0);
+
+  // Calculate service addons - travel is per staff, branding is flat
+  let addonsTotal = 0;
+  if (state.serviceAddons.includes('branding')) addonsTotal += 150;
+  if (state.serviceAddons.includes('travel')) addonsTotal += TRAVEL_RATE_PER_STAFF * teamSize;
+
+  const travelTotal = state.serviceAddons.includes('travel') ? TRAVEL_RATE_PER_STAFF * teamSize : 0;
   const customAddonsTotal = CUSTOM_ADDONS.filter((a) => state.customAddons.includes(a.id)).reduce((sum, a) => sum + a.pricePerGuest * state.guests, 0);
   const subtotal = hatTotal + stylistTotal + addonsTotal + customAddonsTotal;
   const taxTotal = Math.round(subtotal * SALES_TAX_RATE);
@@ -200,6 +246,8 @@ export function computeQuote(state: QuoteState): QuoteBreakdown {
     perPersonCharged,
     selectedHatName: state.selectedHatName || hatTier.title,
     selectedHatPrice: hatPrice,
+    travelTotal,
+    branderCount,
   };
 }
 
