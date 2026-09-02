@@ -57,6 +57,8 @@ const AddBasesManager: React.FC<{
   const [newColorImage, setNewColorImage] = useState('');
   const [uploadingColor, setUploadingColor] = useState(false);
   const [editingColorIndex, setEditingColorIndex] = useState<number | null>(null);
+  const [showOnEventBuilder, setShowOnEventBuilder] = useState(true);
+  const [showOnDesignPage, setShowOnDesignPage] = useState(true);
  
   const load = () => fetchCustomBaseRows().then(setRows);
   useEffect(() => { load(); }, []);
@@ -134,10 +136,12 @@ const AddBasesManager: React.FC<{
       image: imageUrl,
       sizes: selectedSizes,
       colors: colorsData,
+      show_on_event_builder: showOnEventBuilder,
+      show_on_design_page: showOnDesignPage,
     });
     setSaving(false);
     if (!created) { flash('err', 'Could not add the hat. Please try again.'); return; }
-    setName(''); setRange(''); setDescription(''); setImageUrl(''); setSelectedSizes(['os']); setColors([]);
+    setName(''); setRange(''); setDescription(''); setImageUrl(''); setSelectedSizes(['os']); setColors([]); setShowOnEventBuilder(true); setShowOnDesignPage(true);
     load();
     flash('ok', `Added "${created.name}" to the designer.`);
   };
@@ -269,6 +273,21 @@ const AddBasesManager: React.FC<{
           </div>
         </div>
  
+
+        <div className="border-t border-[#4a3c2e] pt-4">
+          <p className="text-xs uppercase tracking-wider text-[#9a8d77] mb-3">Show this hat on</p>
+          <div className="flex gap-6">
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={showOnEventBuilder} onChange={e => setShowOnEventBuilder(e.target.checked)} />
+              <span className="text-sm text-[#cbbfa9]">Event quote builder</span>
+            </label>
+            <label className="flex items-center gap-2 cursor-pointer">
+              <input type="checkbox" checked={showOnDesignPage} onChange={e => setShowOnDesignPage(e.target.checked)} />
+              <span className="text-sm text-[#cbbfa9]">Design page configurator</span>
+            </label>
+          </div>
+        </div>
+
         <button type="button" disabled={saving} onClick={add}
           className="rounded-full bg-[#c9a36a] hover:bg-[#b8915a] text-[#2a2018] font-semibold text-sm px-8 py-3 transition-colors disabled:opacity-50">
           {saving ? 'Adding hat…' : 'Save new hat to configurator'}
@@ -307,6 +326,8 @@ const CustomBaseCard: React.FC<{
   const [editRange, setEditRange] = useState(row.range || '');
   const [editDescription, setEditDescription] = useState(row.description || '');
   const [editSizes, setEditSizes] = useState<string[]>(row.sizes || ['os']);
+  const [editShowEvent, setEditShowEvent] = useState(row.show_on_event_builder ?? true);
+  const [editShowDesign, setEditShowDesign] = useState(row.show_on_design_page ?? true);
   const [saving, setSaving] = useState(false);
  
   const toggleSize = (id: string) => {
@@ -320,7 +341,7 @@ const CustomBaseCard: React.FC<{
   const saveEdit = async () => {
     if (!editName.trim()) { flash('err', 'Hat name is required.'); return; }
     setSaving(true);
-    const patch = { name: editName.trim(), range: editRange.trim(), description: editDescription.trim(), sizes: editSizes };
+    const patch = { name: editName.trim(), range: editRange.trim(), description: editDescription.trim(), sizes: editSizes, show_on_event_builder: editShowEvent, show_on_design_page: editShowDesign };
     const ok = await updateCustomBase(row.id, patch);
     setSaving(false);
     if (ok) { onEdited(row.id, patch); setEditOpen(false); flash('ok', `Updated "${editName}".`); }
@@ -400,6 +421,19 @@ const CustomBaseCard: React.FC<{
                   })}
                 </div>
               </div>
+              <div>
+                <label className="block text-xs text-[#9a8d77] mb-2">Show on</label>
+                <div className="flex gap-4">
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-[#cbbfa9]">
+                    <input type="checkbox" checked={editShowEvent} onChange={e => setEditShowEvent(e.target.checked)} />
+                    Event builder
+                  </label>
+                  <label className="flex items-center gap-2 cursor-pointer text-sm text-[#cbbfa9]">
+                    <input type="checkbox" checked={editShowDesign} onChange={e => setEditShowDesign(e.target.checked)} />
+                    Design page
+                  </label>
+                </div>
+              </div>
               <div className="flex gap-2 pt-2">
                 <button onClick={saveEdit} disabled={saving}
                   className="flex-1 rounded-full bg-[#c9a36a] hover:bg-[#b8915a] text-[#2a2018] font-semibold py-2.5 text-sm transition-colors disabled:opacity-50">
@@ -449,6 +483,14 @@ const CustomBaseCard: React.FC<{
               </div>
             </div>
           )}
+          <div className="flex gap-1 mt-2 flex-wrap">
+            {row.show_on_event_builder && (
+              <span className="text-[9px] bg-[#c9a36a]/20 text-[#c9a36a] rounded-full px-2 py-0.5">Event builder</span>
+            )}
+            {row.show_on_design_page && (
+              <span className="text-[9px] bg-blue-900/30 text-blue-300 rounded-full px-2 py-0.5">Design page</span>
+            )}
+          </div>
           <input ref={fileRef} type="file" accept="image/*" onChange={onPickMain} className="hidden" />
           <button type="button" onClick={() => setEditOpen(true)}
             className="mt-3 w-full rounded-full bg-[#5a4a37] hover:bg-[#6a5a47] text-[#f3ead9] font-semibold text-sm py-2 transition-colors">
@@ -625,10 +667,9 @@ const AdminDesignImages: React.FC = () => {
             <AddBasesManager flash={flash} />
             <div className="border-t border-[#4a3c2e] pt-10 mb-2">
               <p className="text-[#cbbfa9] text-sm max-w-2xl">
-                Below: swap the photo on each of the built-in base hats and featured looks.
+                Below: swap the photos on featured looks.
               </p>
             </div>
-            {renderGroup('Built-in base hat photos', bases)}
             {renderGroup('Featured looks', looks)}
           </>
         )}
@@ -638,4 +679,3 @@ const AdminDesignImages: React.FC = () => {
 };
  
 export default AdminDesignImages;
- 
