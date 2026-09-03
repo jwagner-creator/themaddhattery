@@ -251,14 +251,16 @@ const AdminCustomGallery: React.FC = () => {
               Upload, reorder, and edit titles &amp; captions for the homepage gallery.
             </p>
           </div>
-          <div className="flex gap-3 flex-wrap">
-            <Link to="/" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">View site</Link>
-            <Link to="/maddhattery-admin/photos" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Hat-bar photos</Link>
-            <Link to="/maddhattery-admin/bookings" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Bookings</Link>
-            <button onClick={() => { sessionStorage.removeItem('maddhattery_admin_auth'); setAuthed(false); }} className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Sign out</button>
-          </div>
-        </div>
-
+        <div className="flex gap-3 flex-wrap">
+  <Link to="/" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">View site</Link>
+  <Link to="/maddhattery-admin/photos" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Hat-bar photos</Link>
+  <Link to="/maddhattery-admin/bookings" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Bookings</Link>
+  <Link to="/maddhattery-admin/design" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Hat design</Link>
+  <Link to="/maddhattery-admin/wholesale" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Wholesale</Link>
+  <Link to="/maddhattery-admin/quotes" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Quote requests</Link>
+  <Link to="/maddhattery-admin/addons" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Add-ons</Link>
+  <button onClick={() => { sessionStorage.removeItem('maddhattery_admin_auth'); setAuthed(false); }} className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Sign out</button>
+</div>
         {message && (
           <div className={`mb-6 rounded-xl px-4 py-3 text-sm ${message.type === 'ok' ? 'bg-green-900/40 text-green-200 border border-green-700/40' : 'bg-red-900/40 text-red-200 border border-red-700/40'}`}>
             {message.text}
