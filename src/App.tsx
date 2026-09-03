@@ -17,9 +17,9 @@ import AdminDesignImages from "./pages/AdminDesignImages";
 import AdminCustomGallery from "./pages/AdminCustomGallery";
 import DesignPage from "./pages/DesignPage";
 import SavedDesignPage from "./pages/SavedDesignPage";
-
+ 
 const queryClient = new QueryClient();
-
+ 
 const App = () => (
   <ThemeProvider defaultTheme="light">
     <QueryClientProvider client={queryClient}>
@@ -47,5 +47,6 @@ const App = () => (
     </QueryClientProvider>
   </ThemeProvider>
 );
-
+ 
 export default App;
+ 
