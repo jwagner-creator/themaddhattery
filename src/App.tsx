@@ -3,6 +3,8 @@ import WholesaleApplyPage from './pages/WholesaleApplyPage';
 import WholesaleLoginPage from './pages/WholesaleLoginPage';
 import WholesaleCatalogPage from './pages/WholesaleCatalogPage';
 import AdminWholesalePage from './pages/AdminWholesalePage';
+import AdminQuoteRequests from './pages/AdminQuoteRequests';
+import AdminAddons from './pages/AdminAddons';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -40,6 +42,8 @@ const App = () => (
             <Route path="/wholesale/apply" element={<WholesaleApplyPage />} />
             <Route path="/wholesale/login" element={<WholesaleLoginPage />} />
             <Route path="/wholesale/catalog" element={<WholesaleCatalogPage />} />
+            <Route path="/maddhattery-admin/quotes" element={<AdminQuoteRequests />} />
+            <Route path="/maddhattery-admin/addons" element={<AdminAddons />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
@@ -49,4 +53,3 @@ const App = () => (
 );
  
 export default App;
- 
