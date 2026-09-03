@@ -6,7 +6,7 @@ const AdminCustomGallery: React.FC = () => {
   const [authed, setAuthed] = useState(() => sessionStorage.getItem('maddhattery_admin_auth') === 'true');
   const [pwInput, setPwInput] = useState('');
   const [pwError, setPwError] = useState('');
-  const [designs, setDesigns] = useState<CustomDesign[]>([]);
+ const [designs, setDesigns] = useState<CustomDesign[]>([]); // nav-v2
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
   const [saving, setSaving] = useState(false);
