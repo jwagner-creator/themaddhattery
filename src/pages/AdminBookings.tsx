@@ -67,7 +67,10 @@ const statusStyles: Record<string, string> = {
   completed: 'bg-green-100 text-green-800 border-green-300',
   cancelled: 'bg-red-100 text-red-700 border-red-300',
 };
-
+const parseMoney = (s: string | null): number => {
+  if (!s) return 0;
+  return parseFloat(s.replace(/[$,]/g, '')) || 0;
+};
 const fmtDate = (d: string | null) =>
   d ? new Date(d + (d.length === 10 ? 'T00:00:00' : '')).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' }) : '—';
 
