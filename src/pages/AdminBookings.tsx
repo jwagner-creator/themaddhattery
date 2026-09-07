@@ -349,7 +349,7 @@ const LeadEditModal: React.FC<{
           {/* Financials */}
           <div>
             <h3 className="text-xs uppercase tracking-wider text-[#9a8d78] font-semibold mb-3">Financials</h3>
-            <div className="grid sm:grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
               <div>
                 <label className="block text-xs text-[#7a6e5c] mb-1">Final total (invoice amount)</label>
                 <input value={finalTotal} onChange={e => setFinalTotal(e.target.value)}
