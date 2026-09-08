@@ -23,8 +23,6 @@ export interface QuoteDetails {
   sizes: string[];
   notes: string;
   hatStyle: string;
-  displayTotal: number;
-  displayDeposit: number;
 }
 
 interface QuoteBuilderProps {
@@ -126,7 +124,7 @@ const QuoteBuilder: React.FC<QuoteBuilderProps> = ({ onRequestQuote, onPayDeposi
   const recHours = recommendedHours(state.guests);
 
   const detailsPayload = (): QuoteDetails => ({
-    breakdown,
+    breakdown: { ...breakdown, total, deposit, subtotal, taxTotal, customAddonsTotal: dbCustomTotal, addonsTotal: dbServiceTotal },
     eventTypeLabel,
     guests: state.guests,
     hours: state.hours,
@@ -139,8 +137,6 @@ const QuoteBuilder: React.FC<QuoteBuilderProps> = ({ onRequestQuote, onPayDeposi
     sizes: state.sizes,
     notes: state.notes,
     hatStyle: state.selectedHatName || '',
-    displayTotal: total,
-    displayDeposit: deposit,
   });
 
   const toggleAddon = (key: 'serviceAddons' | 'customAddons', id: string) =>
