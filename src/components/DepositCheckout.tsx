@@ -59,8 +59,8 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
         event_type: eventTypeLabel,
         event_date: eventDate || null,
         guests,
-        estimated_total: displayTotal ? money(displayTotal) : money(breakdown.total),
-        deposit: displayDeposit ? money(displayDeposit) : money(breakdown.deposit),
+        estimated_total: money(breakdown.total),
+        deposit: money(breakdown.deposit),
         notes: [
           notes,
           `Hours: ${hours}`,
@@ -88,8 +88,8 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
             event_type: eventTypeLabel,
             event_date: eventDate,
             guests,
-            estimated_total: displayTotal ? money(displayTotal) : money(breakdown.total),
-            deposit: displayDeposit ? money(displayDeposit) : money(breakdown.deposit),
+            estimated_total: money(breakdown.total),
+            deposit: money(breakdown.deposit),
             notes,
           },
         }),
@@ -124,7 +124,7 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
               <h3 className="font-serif text-2xl text-[#2a2018] mb-2">You're all set!</h3>
               <p className="text-[#5b5043] mb-1">
                 We've received your quote request for <strong>{eventTypeLabel}</strong> — {guests} guests,
-                estimated {displayTotal ? money(displayTotal) : money(breakdown.total)}.
+                estimated {money(breakdown.total)}.
               </p>
               <p className="text-[#5b5043] mb-6">
                 We'll be in touch within 1-2 business days to confirm everything and send you
@@ -165,11 +165,11 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
                 </div>
                 <div className="flex justify-between text-[#5b5043]">
                   <span>Estimated total</span>
-                  <span className="font-medium text-[#2a2018]">{displayTotal ? money(displayTotal) : money(breakdown.total)}</span>
+                  <span className="font-medium text-[#2a2018]">{money(breakdown.total)}</span>
                 </div>
                 <div className="flex justify-between border-t border-[#e0d4c0] pt-1.5">
                   <span className="text-[#5b5043]">Deposit to book (50% of total)</span>
-                  <span className="font-bold text-[#2a2018]">{displayDeposit ? money(displayDeposit) : money(breakdown.deposit)}</span>
+                  <span className="font-bold text-[#2a2018]">{money(breakdown.deposit)}</span>
                 </div>
               </div>
 
