@@ -249,6 +249,8 @@ const LeadEditModal: React.FC<{
   const [hatPricePerGuest, setHatPricePerGuest] = useState(lead.hat_price_per_guest || 0);
   const [guests, setGuests] = useState(lead.guests || 0);
   const [hours, setHours] = useState(lead.hours || 3);
+  const [teamSizeOverride, setTeamSizeOverride] = useState<number | null>(null);
+const effectiveTeamSize = teamSizeOverride || getTeamSize(guests);
   const [consultationDate, setConsultationDate] = useState(lead.consultation_date || '');
   const [depositReceived, setDepositReceived] = useState(lead.deposit_received || false);
   const [amountPaid, setAmountPaid] = useState(lead.amount_paid || 0);
