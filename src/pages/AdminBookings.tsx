@@ -156,7 +156,7 @@ const generateInvoice = (lead: Lead, calc: ReturnType<typeof calcTotals>) => {
   <div class="header">
     <div class="brand">
       <h1>the maddhattery</h1>
-      <p>by VinHaus Boutique & Hat Bar</p>
+      <p>by VinHaus LLC.</p>
       <p>hello@thevinhaus.com</p>
     </div>
     <div class="invoice-info">
@@ -199,8 +199,8 @@ const generateInvoice = (lead: Lead, calc: ReturnType<typeof calcTotals>) => {
   ${lead.notes ? `<div style="margin-top:30px;padding:16px;background:#f6efe4;border-radius:8px;font-size:13px;color:#5b5043;"><strong>Notes:</strong> ${lead.notes}</div>` : ''}
 
   <div class="footer">
-    <p>the maddhattery by VinHaus · hello@thevinhaus.com · Thank you for your business!</p>
-    <p>Payment due upon receipt. Set up, break down, and travel time billed separately if applicable.</p>
+    <p>the maddhattery by The VinHaus · hello@thevinhaus.com · Thank you for your business!</p>
+    <p>Payment due upon receipt.</p>
   </div>
   <script>window.print();</script>
   </body></html>`);
@@ -314,11 +314,11 @@ const LeadEditModal: React.FC<{
     onClose();
   };
 
-  const handleInvoice = () => {
+    const handleInvoice = () => {
     const fullLead = {
       ...lead, name, email, phone, event_type: eventType, event_date: eventDate,
       event_location: eventLocation, company, hat_style: hatStyle,
-      hat_price_per_guest: hatPricePerGuest, guests, hours,
+      hat_price_per_guest: hatPricePerGuest, guests, hours, notes,
       custom_addons: customAddons.join(', '), custom_line_items: lineItems,
       service_addons: serviceAddons.join(', '), taxable, tax_rate: taxRate,
     };
