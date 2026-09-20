@@ -56,10 +56,10 @@ const TestimonialsCarousel: React.FC = () => {
     <section className="bg-[#f6efe4] py-12 sm:py-16">
       <div className="max-w-6xl mx-auto px-5">
                 <div className="text-center mb-8">
-          <p className="text-sm text-[#5b5043] mb-2">We love making your guests smile.</p>
+      
           <p className="text-xs uppercase tracking-[0.25em] text-[#b8915a] mb-2">Happy Clients</p>
           <h2 className="font-serif text-2xl sm:text-3xl text-[#2a2018]">Past Hat Bar Activations</h2>
-          <p className="mt-3 text-[#5b5043] max-w-xl mx-auto">We love giving your guests an unforgettable experience and a gift — Texas style!</p>
+                   <p className="mt-3 text-[#5b5043] max-w-xl mx-auto">We love giving your guests an unforgettable experience and a gift —<br />Texas style!</p>
         </div>
 
         <div className="relative">
