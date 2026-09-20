@@ -13,7 +13,7 @@ const Hero: React.FC<HeroProps> = ({
     images
   } = useBucketImages([FALLBACK_HERO]);
   const heroImg = images[0] || FALLBACK_HERO;
-  return <section className="relative min-h-screen flex items-center">
+  return <section className="relative flex items-center" style={{minHeight: "70vh"}}>
       <div className="absolute inset-0">
         <img src="https://d64gsuwffb70l.cloudfront.net/6834789ecdd892bd5a829aa2_1781995236953_0f5c7d2a.jpg" alt="Mobile hat bar setup" className="w-full h-full object-cover" />
         <div className="absolute inset-0 bg-gradient-to-r from-[#2a2018]/90 via-[#2a2018]/70 to-[#2a2018]/30" />
