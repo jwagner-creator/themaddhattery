@@ -5,6 +5,7 @@ import WholesaleCatalogPage from './pages/WholesaleCatalogPage';
 import AdminWholesalePage from './pages/AdminWholesalePage';
 import AdminQuoteRequests from './pages/AdminQuoteRequests';
 import AdminAddons from './pages/AdminAddons';
+import AdminTestimonials from './pages/AdminTestimonials';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -44,6 +45,7 @@ const App = () => (
             <Route path="/wholesale/catalog" element={<WholesaleCatalogPage />} />
             <Route path="/maddhattery-admin/quotes" element={<AdminQuoteRequests />} />
             <Route path="/maddhattery-admin/addons" element={<AdminAddons />} />
+            <Route path="/maddhattery-admin/testimonials" element={<AdminTestimonials />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
@@ -53,5 +55,3 @@ const App = () => (
 );
  
 export default App;
- 
- 
