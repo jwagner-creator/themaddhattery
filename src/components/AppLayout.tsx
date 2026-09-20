@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Header from '@/components/Header';
+import TestimonialsCarousel from '@/components/TestimonialsCarousel';
 import Hero from '@/components/Hero';
 import QuoteBuilder, { QuoteDetails } from '@/components/QuoteBuilder';
 import ConsultationCTA from '@/components/ConsultationCTA';
@@ -30,6 +31,7 @@ const AppLayout: React.FC = () => {
     <div className="min-h-screen bg-[#fbf7f0] font-sans">
       <Header onPlan={scrollToBuilder} />
       <Hero onPlan={scrollToBuilder} />
+      <TestimonialsCarousel />
       <QuoteBuilder onRequestQuote={handleRequestQuote} onPayDeposit={handlePayDeposit} />
       <DesignGallery
         onConsult={() =>
