@@ -335,7 +335,7 @@ const AdminAddons: React.FC = () => {
                   onChange={e => setNewAddon(v => ({ ...v, max_guests: e.target.value ? parseInt(e.target.value) : undefined }))}
                   placeholder="Leave blank for no limit"
                   className="w-full rounded-lg border border-[#d8cbb4] px-3 py-2.5 text-sm outline-none focus:border-[#c9a36a]" />
-              </div>
+                            </div>
               <div className="sm:col-span-2 lg:col-span-3">
                 <label className="block text-xs text-[#7a6e5c] mb-1">Note (optional)</label>
                 <input value={newAddon.note || ''} onChange={e => setNewAddon(v => ({ ...v, note: e.target.value }))}
@@ -348,11 +348,14 @@ const AdminAddons: React.FC = () => {
                     onChange={e => setNewAddon(v => ({ ...v, per_staff: e.target.checked }))} />
                   <label htmlFor="per_staff" className="text-sm text-[#5b5043]">Price per staff member</label>
                 </div>
-              <div className="flex items-center gap-2">
+              )}
+              {newAddon.type === 'service' && (
+                <div className="flex items-center gap-2">
                   <input type="checkbox" id="per_brander" checked={newAddon.per_brander || false}
                     onChange={e => setNewAddon(v => ({ ...v, per_brander: e.target.checked }))} />
                   <label htmlFor="per_brander" className="text-sm text-[#5b5043]">Price per brander (1 per 25 guests, max 3)</label>
                 </div>
+              )}
               )}
             </div>
             <button onClick={addNew} disabled={saving}
