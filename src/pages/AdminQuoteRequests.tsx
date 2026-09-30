@@ -101,7 +101,7 @@ const AdminQuoteRequests: React.FC = () => {
   const confirmAndMove = async (lead: Lead) => {
     if (!window.confirm(`Confirm ${lead.name}'s request and move to bookings?`)) return;
     setSaving(true);
-
+    console.log('Confirming lead:', JSON.stringify(lead));
     // Insert into bookings table
     const { error: bookingError } = await supabase.from('bookings').insert({
       lead_id: lead.id,
