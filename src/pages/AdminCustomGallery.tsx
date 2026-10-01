@@ -259,6 +259,7 @@ const AdminCustomGallery: React.FC = () => {
             <Link to="/maddhattery-admin/wholesale" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Wholesale</Link>
             <Link to="/maddhattery-admin/quotes" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Quote requests</Link>
             <Link to="/maddhattery-admin/addons" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Add-ons</Link>
+            <Link to="/maddhattery-admin/events" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Event manager</Link>
             <Link to="/maddhattery-admin/testimonials" className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Testimonials</Link>
             <button onClick={() => { sessionStorage.removeItem('maddhattery_admin_auth'); setAuthed(false); }} className="rounded-full border border-[#5a4a37] px-5 py-2.5 text-sm hover:bg-[#2a2018] transition-colors">Sign out</button>
           </div>
