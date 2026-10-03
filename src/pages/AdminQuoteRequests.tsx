@@ -99,7 +99,7 @@ const AdminQuoteRequests: React.FC = () => {
   };
 
   const confirmAndMove = async (lead: Lead) => {
-    if (!window.confirm(`Confirm ${lead.name}'s request and move to bookings?`)) return;
+    if (!window.confirm(`Confirm ${lead.name}'s request and move to proposals?`)) return;
     setSaving(true);
     console.log('Confirming lead:', JSON.stringify(lead));
     // Insert into bookings table
@@ -220,7 +220,7 @@ const AdminQuoteRequests: React.FC = () => {
                     </button>
                     <button onClick={() => confirmAndMove(lead)} disabled={saving}
                       className="rounded-full bg-green-600 hover:bg-green-700 text-white px-4 py-2 text-sm font-medium disabled:opacity-50">
-                      Confirm & move to bookings
+                      Confirm & move to proposals
                     </button>
                     <button onClick={() => deleteLead(lead.id, lead.name)}
                       className="rounded-full border border-red-200 text-red-500 hover:bg-red-50 px-3 py-2 text-sm">
