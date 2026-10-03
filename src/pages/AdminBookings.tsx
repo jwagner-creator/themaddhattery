@@ -741,7 +741,7 @@ const AdminBookings: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-5">
           <div className="mb-3">
             <p className="text-xs uppercase tracking-[0.25em] text-[#c9a36a]">the maddhattery</p>
-            <h1 className="font-serif text-2xl">Bookings Dashboard</h1>
+            <h1 className="font-serif text-2xl">Proposals</h1>
           </div>
           <div className="flex gap-2 flex-wrap">
             {NAV_LINKS.map(l => (
@@ -788,7 +788,7 @@ const AdminBookings: React.FC = () => {
         {/* Bookings list */}
         <div className="flex items-center justify-between mb-4">
           <div>
-            <h2 className="font-serif text-2xl text-[#2a2018]">Confirmed Bookings</h2>
+            <h2 className="font-serif text-2xl text-[#2a2018]">Current Proposals</h2>
             <p className="text-sm text-[#7a6e5c] mt-0.5">{leads.length} event{leads.length !== 1 ? 's' : ''}</p>
           </div>
           <button onClick={fetchBookings} className="rounded-lg border border-[#d8cbb4] bg-white px-3 py-2 text-sm hover:bg-[#f3ead9]">Refresh</button>
