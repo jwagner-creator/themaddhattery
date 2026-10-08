@@ -44,7 +44,8 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
-  const [smsOptIn, setSmsOptIn] = useState(true);
+  const [hearAboutUs, setHearAboutUs] = useState('');
+  const [locationInput, setLocationInput] = useState('');
   const [eventDate, setEventDate] = useState('');
   const [notes, setNotes] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'done'>('idle');
@@ -230,16 +231,35 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
                     type="date"
                     value={eventDate}
                     onChange={(e) => setEventDate(e.target.value)}
-                    className="w-full rounded-lg border border-[#d8cbb4] bg-white px-4 py-3 text-[#5b5043] outline-none focus:border-[#c9a36a]"
-                  />
-                </div>
-                <div>
+                                 <div>
+                                 <div>
                   <label className="block text-xs text-[#7a6e5c] mb-1 ml-1">Event location <span className="text-red-500">*</span></label>
                   <input type="text" value={locationInput} onChange={e => setLocationInput(e.target.value)}
                     placeholder="Venue name and city (required)"
                     className="w-full rounded-lg border border-[#d8cbb4] bg-white px-4 py-3 text-[#2a2018] outline-none focus:border-[#c9a36a]" />
                 </div>
                 <div>
+                  <label className="block text-xs text-[#7a6e5c] mb-1 ml-1">How did you hear about us?</label>
+                  <select value={hearAboutUs} onChange={e => setHearAboutUs(e.target.value)}
+                    className="w-full rounded-lg border border-[#d8cbb4] bg-white px-4 py-3 text-sm text-[#5b5043] outline-none focus:border-[#c9a36a]">
+                    <option value="">Select one…</option>
+                    <option value="Instagram">Instagram</option>
+                    <option value="Facebook">Facebook</option>
+                    <option value="Google">Google search</option>
+                    <option value="Friend or colleague">Friend or colleague</option>
+                    <option value="Attended a past event">Attended a past event</option>
+                    <option value="The VinHaus boutique">The VinHaus boutique</option>
+                    <option value="Vendor referral">Vendor referral</option>
+                    <option value="Other">Other</option>
+                  </select>
+                </div>
+                <textarea
+                  value={notes}
+                  onChange={(e) => setNotes(e.target.value)}
+                  placeholder="Theme, special requests, or anything else (optional)"
+                  rows={2}
+                  className="w-full rounded-lg border border-[#d8cbb4] bg-white px-4 py-3 text-[#2a2018] outline-none focus:border-[#c9a36a] resize-none"
+                />
                   <label className="block text-xs text-[#7a6e5c] mb-1 ml-1">How did you hear about us?</label>
                   <select value={hearAboutUs} onChange={e => setHearAboutUs(e.target.value)}
                     className="w-full rounded-lg border border-[#d8cbb4] bg-white px-4 py-3 text-sm text-[#5b5043] outline-none focus:border-[#c9a36a]">
