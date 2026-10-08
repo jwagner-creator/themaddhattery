@@ -47,8 +47,6 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
   const [smsOptIn, setSmsOptIn] = useState(true);
   const [eventDate, setEventDate] = useState('');
   const [notes, setNotes] = useState('');
-  const [hearAboutUs, setHearAboutUs] = useState('');
-  const [locationInput, setLocationInput] = useState(eventLocation || '');
   const [status, setStatus] = useState<'idle' | 'loading' | 'done'>('idle');
 
   useEffect(() => {
@@ -63,6 +61,7 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email || !name) return;
+    if (!locationInput.trim()) { alert('Please enter your event location.'); return; }
     setStatus('loading');
 
     try {
@@ -77,6 +76,7 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
         event_location: locationInput || eventLocation || null,
         hat_style: hatStyle || null,
         company: company || null,
+        source_detail: hearAboutUs || null,
         guests,
         hours,
         estimated_total: displayTotal ? money(displayTotal) : money(breakdown.total),
@@ -235,14 +235,9 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
                 </div>
                 <div>
                   <label className="block text-xs text-[#7a6e5c] mb-1 ml-1">Event location <span className="text-red-500">*</span></label>
-                  <input
-                    type="text"
-                    value={locationInput}
-                    onChange={e => setLocationInput(e.target.value)}
+                  <input type="text" value={locationInput} onChange={e => setLocationInput(e.target.value)}
                     placeholder="Venue name and city (required)"
-                    required
-                    className="w-full rounded-lg border border-[#d8cbb4] bg-white px-4 py-3 text-[#2a2018] outline-none focus:border-[#c9a36a]"
-                  />
+                    className="w-full rounded-lg border border-[#d8cbb4] bg-white px-4 py-3 text-[#2a2018] outline-none focus:border-[#c9a36a]" />
                 </div>
                 <div>
                   <label className="block text-xs text-[#7a6e5c] mb-1 ml-1">How did you hear about us?</label>
