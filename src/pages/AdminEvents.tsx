@@ -15,6 +15,7 @@ const NAV_LINKS = [
   { to: '/maddhattery-admin/design', label: 'Hat design' },
   { to: '/maddhattery-admin/addons', label: 'Add-ons' },
   { to: '/maddhattery-admin/testimonials', label: 'Testimonials' },
+    { to: '/maddhattery-admin/staff', label: 'Staff roster' },
 ];
 
 const STATUS_OPTIONS = [
