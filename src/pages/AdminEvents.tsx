@@ -321,7 +321,7 @@ const EventModal: React.FC<{
   onSaved: (b: Booking, c: Checklist) => void;
   flash: (type: 'ok' | 'err', text: string) => void;
 }> = ({ booking, onClose, onSaved, flash }) => {
-  const [tab, setTab] = useState<'overview' | 'financials' | 'staff' | 'hats' | 'logistics' | 'checklist' | 'tasks'>('overview');
+    const [tab, setTab] = useState<'overview' | 'financials' | 'staff' | 'hats' | 'logistics' | 'checklist' | 'tasks' | 'emails'>('overview');
   const [checklist, setChecklist] = useState<Checklist>(defaultChecklist(booking.id));
   const [checklistId, setChecklistId] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -587,6 +587,7 @@ const EventModal: React.FC<{
             { id: 'logistics', label: 'Logistics' },
             { id: 'checklist', label: 'Checklist' },
             { id: 'tasks', label: 'Tasks' },
+                  { id: 'emails', label: 'Email tracker' },
           ].map(t => (
             <button key={t.id} onClick={() => setTab(t.id as typeof tab)} className={tabClass(t.id)}>{t.label}</button>
           ))}
@@ -1457,6 +1458,85 @@ const EventModal: React.FC<{
             </div>
           )}
         </div>
+                  {/* EMAIL TRACKER */}
+          {tab === 'emails' && (
+            <div className="space-y-4">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h3 className="font-medium text-[#2a2018]">Email tracker</h3>
+                  <p className="text-sm text-[#7a6e5c]">Track all emails sent to this client</p>
+                </div>
+                <button onClick={() => {
+                  const newEmail = { id: `email-${Date.now()}`, type: 'proposal', subject: '', sent_date: new Date().toISOString().split('T')[0], sent_by: '', follow_up_date: '', response: 'pending', response_date: '', notes: '' };
+                  set({ emails_sent: [...((checklist as any).emails_sent || []), newEmail] } as any);
+                }} className="rounded-full bg-[#2a2018] text-[#f3ead9] text-sm px-4 py-2 hover:bg-[#3a2e22]">
+                  + Log email
+                </button>
+              </div>
+              {(!(checklist as any).emails_sent || (checklist as any).emails_sent.length === 0) ? (
+                <div className="bg-[#f6efe4] rounded-xl p-8 text-center text-[#7a6e5c]">No emails logged yet. Click <strong>+ Log email</strong> to start tracking.</div>
+              ) : (
+                <div className="space-y-3">
+                  {((checklist as any).emails_sent as any[]).map((email: any, i: number) => (
+                    <div key={email.id} className={`rounded-xl border p-4 ${email.response === 'responded' ? 'bg-green-50 border-green-200' : email.response === 'no_response' ? 'bg-red-50 border-red-200' : 'bg-white border-[#e0d4c0]'}`}>
+                      <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-3">
+                        <div>
+                          <label className="block text-xs text-[#7a6e5c] mb-1">Email type</label>
+                          <select value={email.type} onChange={e => { const em = [...(checklist as any).emails_sent]; em[i] = { ...em[i], type: e.target.value }; set({ emails_sent: em } as any); }}
+                            className="w-full rounded-lg border border-[#d8cbb4] px-3 py-2 text-sm outline-none focus:border-[#c9a36a]">
+                            <option value="proposal">Initial proposal</option>
+                            <option value="follow_up">Follow-up</option>
+                            <option value="quote_update">Updated quote</option>
+                            <option value="booking_confirm">Booking confirmation</option>
+                            <option value="event_reminder">Event reminder</option>
+                            <option value="thank_you">Thank you</option>
+                            <option value="testimonial">Testimonial request</option>
+                            <option value="other">Other</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-xs text-[#7a6e5c] mb-1">Subject</label>
+                          <input value={email.subject} onChange={e => { const em = [...(checklist as any).emails_sent]; em[i] = { ...em[i], subject: e.target.value }; set({ emails_sent: em } as any); }}
+                            placeholder="Email subject line" className="w-full rounded-lg border border-[#d8cbb4] px-3 py-2 text-sm outline-none focus:border-[#c9a36a]" />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-[#7a6e5c] mb-1">Sent by</label>
+                          <input value={email.sent_by} onChange={e => { const em = [...(checklist as any).emails_sent]; em[i] = { ...em[i], sent_by: e.target.value }; set({ emails_sent: em } as any); }}
+                            placeholder="Your name" className="w-full rounded-lg border border-[#d8cbb4] px-3 py-2 text-sm outline-none focus:border-[#c9a36a]" />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-[#7a6e5c] mb-1">Date sent</label>
+                          <input type="date" value={email.sent_date} onChange={e => { const em = [...(checklist as any).emails_sent]; em[i] = { ...em[i], sent_date: e.target.value }; set({ emails_sent: em } as any); }}
+                            className="w-full rounded-lg border border-[#d8cbb4] px-3 py-2 text-sm outline-none focus:border-[#c9a36a]" />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-[#7a6e5c] mb-1">Follow-up date</label>
+                          <input type="date" value={email.follow_up_date} onChange={e => { const em = [...(checklist as any).emails_sent]; em[i] = { ...em[i], follow_up_date: e.target.value }; set({ emails_sent: em } as any); }}
+                            className="w-full rounded-lg border border-[#d8cbb4] px-3 py-2 text-sm outline-none focus:border-[#c9a36a]" />
+                        </div>
+                        <div>
+                          <label className="block text-xs text-[#7a6e5c] mb-1">Response</label>
+                          <select value={email.response} onChange={e => { const em = [...(checklist as any).emails_sent]; em[i] = { ...em[i], response: e.target.value }; set({ emails_sent: em } as any); }}
+                            className="w-full rounded-lg border border-[#d8cbb4] px-3 py-2 text-sm outline-none focus:border-[#c9a36a]">
+                            <option value="pending">Pending</option>
+                            <option value="responded">Responded ✓</option>
+                            <option value="no_response">No response</option>
+                          </select>
+                        </div>
+                        <div className="sm:col-span-2 lg:col-span-3">
+                          <label className="block text-xs text-[#7a6e5c] mb-1">Notes</label>
+                          <input value={email.notes} onChange={e => { const em = [...(checklist as any).emails_sent]; em[i] = { ...em[i], notes: e.target.value }; set({ emails_sent: em } as any); }}
+                            placeholder="What was discussed, next steps…" className="w-full rounded-lg border border-[#d8cbb4] px-3 py-2 text-sm outline-none focus:border-[#c9a36a]" />
+                        </div>
+                      </div>
+                      <button onClick={() => set({ emails_sent: (checklist as any).emails_sent.filter((_: any, idx: number) => idx !== i) } as any)}
+                        className="text-xs text-red-400 hover:text-red-600">Remove entry</button>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
         {/* Footer */}
         <div className="sticky bottom-0 bg-white rounded-b-2xl border-t border-[#e0d4c0] px-6 py-4 flex gap-3">
