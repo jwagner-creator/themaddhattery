@@ -130,13 +130,13 @@ const AdminQuoteRequests: React.FC = () => {
       estimated_total: lead.estimated_total,
       deposit: lead.deposit,
       final_total: lead.final_total,
-      status: 'confirmed',
+      status: 'review',
       source: lead.source || 'quote-request',
     });
 
     if (bookingError) { setSaving(false); flash('err', 'Could not create booking.'); return; }
 
-    // Mark lead as confirmed
+    // Mark lead as review
     await supabase.from('leads').update({ confirmed: true }).eq('id', lead.id);
 
     setSaving(false);
