@@ -19,7 +19,7 @@ const NAV_LINKS = [
 ];
 
 const STATUS_OPTIONS = [
-  { id: 'quote_request', label: 'Quote Request', color: 'bg-gray-100 text-gray-700' },
+  { id: 'review', label: 'Review', color: 'bg-gray-100 text-gray-700' },
   { id: 'consultation_scheduled', label: 'Consultation', color: 'bg-blue-100 text-blue-700' },
   { id: 'proposal_sent', label: 'Proposal Sent', color: 'bg-yellow-100 text-yellow-700' },
   { id: 'follow_up_sent', label: 'Follow-up Sent', color: 'bg-orange-100 text-orange-700' },
