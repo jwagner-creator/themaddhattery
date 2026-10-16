@@ -456,7 +456,6 @@ const EventModal: React.FC<{
       final_payment_received: checklist.final_payment_received,
       testimonial_requested: checklist.testimonial_requested,
       testimonial_received: checklist.testimonial_received,
-      task_notes: checklist.task_notes || null,
       emails_sent: (checklist as any).emails_sent || [],
       task_notes: checklist.task_notes || null,
       total_revenue: revenue,
