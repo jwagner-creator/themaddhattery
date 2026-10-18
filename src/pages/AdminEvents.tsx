@@ -2001,7 +2001,7 @@ const AdminEvents: React.FC = () => {
                     <div className="text-right">
                       <p className="text-xs text-[#9a8d78]">Revenue</p>
                       <p className="font-bold text-[#2a2018]">{fmt(revenue)}</p>
-                                           <p className="font-bold text-[#2a2018]">{fmt(cardTotal)}</p>
+                      <p className="font-bold text-[#2a2018]">{fmt(cardTotal)}</p>
                     </div>
                   </div>
                 </div>
