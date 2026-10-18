@@ -1980,9 +1980,10 @@ const AdminEvents: React.FC = () => {
           </div>
         ) : (
           <div className="space-y-3">
-            {filtered.map(booking => {
+                        {filtered.map(booking => {
               const status = STATUS_OPTIONS.find(s => s.id === (booking.checklist_status || 'quote_request'));
-                                    const cardTotal = parseMoney(booking.final_total || booking.estimated_total);
+              const cardTotal = parseMoney(booking.final_total || booking.estimated_total);
+          
               return (
                 <div key={booking.id} className="bg-white rounded-xl border border-[#e0d4c0] p-5 hover:shadow-md transition-shadow cursor-pointer"
                   onClick={() => setSelectedBooking(booking)}>
