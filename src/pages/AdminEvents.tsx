@@ -1121,13 +1121,8 @@ const EventModal: React.FC<{
                         <span className="text-[#c9a36a] ml-1">Total: {fmt((booking.hat_wholesale_cost || 0) * (booking.guests || 0))}</span>
                       )}
                     </label>
-                    <input type="number" step="0.01" value={booking.hat_wholesale_cost || ''}
-                      onChange={async e => {
-                        const val = parseFloat(e.target.value) || 0;
-                        await supabase.from('bookings').update({ hat_wholesale_cost: val }).eq('id', booking.id);
-                        (booking as any).hat_wholesale_cost = val;
-                        set({});
-                      }}
+                      <input type="number" step="0.01" value={(bookingEdits as any).hat_wholesale_cost || ''}
+                      onChange={e => setBookingEdits(v => ({ ...v, hat_wholesale_cost: parseFloat(e.target.value) || 0 }))}
                       placeholder="What you pay per hat"
                       className="w-full rounded-lg border border-[#d8cbb4] px-3 py-2 text-sm outline-none focus:border-[#c9a36a]" />
                   </div>
