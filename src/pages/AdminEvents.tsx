@@ -428,8 +428,8 @@ const EventModal: React.FC<{
     [checklist.other_expenses]
   );
 
-  const autoHatRevenue = (booking.hat_price_per_guest || 0) * (booking.guests || 0);
-  const autoHatCost = (booking.hat_wholesale_cost || 0) * (booking.guests || 0);
+  const autoHatRevenue = (bookingEdits.hat_price_per_guest || booking.hat_price_per_guest || 0) * (bookingEdits.guests || booking.guests || 0);
+  const autoHatCost = ((bookingEdits as any).hat_wholesale_cost ?? booking.hat_wholesale_cost ?? 0) * (bookingEdits.guests || booking.guests || 0);
   const hatCost = autoHatCost > 0 ? autoHatCost : checklist.hats_cost;
   const totalCosts = staffTotal + hatCost + hatBarTotal + mercTotal + shipTotal + hotelTotal + mileageTotal + checklist.travel_cost + otherTotal;
   const finalTotal = parseMoney((bookingEdits as any).final_total || booking.final_total || booking.estimated_total);
