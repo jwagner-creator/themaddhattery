@@ -1982,8 +1982,7 @@ const AdminEvents: React.FC = () => {
           <div className="space-y-3">
             {filtered.map(booking => {
               const status = STATUS_OPTIONS.find(s => s.id === (booking.checklist_status || 'quote_request'));
-              const finalTotal = parseMoney((bookingEdits as any).final_total || booking.final_total || booking.estimated_total);
-  const revenue = finalTotal;
+                                    const cardTotal = parseMoney(booking.final_total || booking.estimated_total);
               return (
                 <div key={booking.id} className="bg-white rounded-xl border border-[#e0d4c0] p-5 hover:shadow-md transition-shadow cursor-pointer"
                   onClick={() => setSelectedBooking(booking)}>
@@ -2001,7 +2000,7 @@ const AdminEvents: React.FC = () => {
                     <div className="text-right">
                       <p className="text-xs text-[#9a8d78]">Revenue</p>
                       <p className="font-bold text-[#2a2018]">{fmt(revenue)}</p>
-                      <p className="text-xs text-[#c9a36a] mt-0.5">Click to manage →</p>
+                                           <p className="font-bold text-[#2a2018]">{fmt(cardTotal)}</p>
                     </div>
                   </div>
                 </div>
