@@ -1998,9 +1998,8 @@ const AdminEvents: React.FC = () => {
                       <p className="text-sm text-[#5b5043]">{booking.event_type} · {fmtDate(booking.event_date)}</p>
                       <p className="text-xs text-[#9a8d78]">{booking.event_location} · {booking.guests} guests · {booking.hours || 3} hrs</p>
                     </div>
-                    <div className="text-right">
+                      <div className="text-right">
                       <p className="text-xs text-[#9a8d78]">Revenue</p>
-                      <p className="font-bold text-[#2a2018]">{fmt(revenue)}</p>
                       <p className="font-bold text-[#2a2018]">{fmt(cardTotal)}</p>
                     </div>
                   </div>
