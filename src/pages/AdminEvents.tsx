@@ -1775,7 +1775,7 @@ const AdminEvents: React.FC = () => {
     const totalRevenue = bookings.filter(b => !['cancelled'].includes(b.checklist_status || '')).reduce((s, b) => s + getRevenue(b), 0);
     const totalCosts = bookings.reduce((s, b) => s + parseMoney(b.final_total || b.estimated_total) * 0.4, 0); // rough estimate until checklist costs loaded
 
-    return { byStatus, quoteRevenue, bookedRevenue, paidTotal, pastDue, totalRevenue };
+        return { byStatus, quoteRevenue, bookedRevenue, paidTotal, balanceDue: balanceDue || 0, dueThisMonth: dueThisMonth || 0, pastDue: pastDue || 0, totalRevenue, netProfit: netProfit || 0 };
   }, [bookings]);
 
   const filtered = useMemo(() => {
