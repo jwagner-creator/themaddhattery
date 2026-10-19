@@ -1759,8 +1759,8 @@ const AdminEvents: React.FC = () => {
     // Booked = booked + ready stages only
     const bookedRevenue = bookings.filter(b => bookedStages.includes(b.checklist_status || '')).reduce((s, b) => s + getRevenue(b), 0);
     
-    // Paid = all stages
-    const paidTotal = bookings.reduce((s, b) => s + getPaid(b), 0);
+       // Paid = booked, ready, completed stages only
+    const paidTotal = bookings.filter(b => ['booked', 'ready', 'completed'].includes(b.checklist_status || '')).reduce((s, b) => s + getPaid(b), 0);
     
     // Balance due on booked/ready events only
     const balanceDue = bookings.filter(b => bookedStages.includes(b.checklist_status || '')).reduce((s, b) => s + Math.max(0, getRevenue(b) - getPaid(b)), 0);
