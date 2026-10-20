@@ -434,9 +434,7 @@ const EventModal: React.FC<{
   const totalCosts = staffTotal + hatCost + hatBarTotal + mercTotal + shipTotal + hotelTotal + mileageTotal + checklist.travel_cost + otherTotal;
   const finalTotal = parseMoney((bookingEdits as any).final_total || booking.final_total || booking.estimated_total);
   const revenue = finalTotal;
-     const netProfitTotal = Object.values(checklists).reduce((s: number, c: any) => s + (c.net_profit || 0), 0);
-    return { byStatus, quoteRevenue, bookedRevenue, paidTotal, balanceDue: balanceDue || 0, dueThisMonth: dueThisMonth || 0, pastDue: pastDue || 0, totalRevenue, netProfit: netProfitTotal };
-
+    
   const save = async () => {
     setSaving(true);
     const patch = {
