@@ -171,12 +171,17 @@ const QuoteBuilder: React.FC<QuoteBuilderProps> = ({ onRequestQuote, onPayDeposi
     .reduce((sum, a) => sum + a.price_per_guest * state.guests, 0);
 
   // Calculate service addons total from DB addons
-  const dbServiceTotal = serviceAddons
+    const dbServiceTotal = [...serviceAddons, ...staffAddons, ...travelAddons]
     .filter(a => state.serviceAddons.includes(a.id))
     .reduce((sum, a) => {
-      if (a.per_brander) return sum + a.flat_price * getBranderCount(state.guests);
-      if (a.per_staff) return sum + a.flat_price * getTeamSize(state.guests);
-      return sum + a.flat_price;
+      if (a.price_per_hour > 0 && a.per_brander) return sum + a.price_per_hour * getBranderCount(state.guests) * state.hours;
+      if (a.price_per_hour > 0 && a.per_staff) return sum + a.price_per_hour * getTeamSize(state.guests) * state.hours;
+      if (a.price_per_hour > 0) return sum + a.price_per_hour * state.hours;
+      if (a.per_brander && a.flat_price > 0) return sum + a.flat_price * getBranderCount(state.guests);
+      if (a.per_staff && a.flat_price > 0) return sum + a.flat_price * getTeamSize(state.guests);
+      if (a.price_per_guest > 0) return sum + a.price_per_guest * state.guests;
+      if (a.flat_price > 0) return sum + a.flat_price;
+      return sum;
     }, 0);
 
   const subtotal = (breakdown.hatTotal || 0) + breakdown.stylistTotal + dbServiceTotal + dbCustomTotal;
