@@ -523,7 +523,7 @@ const EventModal: React.FC<{
     if (saveError) { flash('err', 'Could not save checklist: ' + saveError.message); return; }
     if (bookingError) { flash('err', 'Could not save status: ' + bookingError.message); return; }
     setChecklist(patch);
-    onSaved({ ...booking, checklist_status: status }, patch);
+   onSaved({ ...booking, ...bookingEdits, checklist_status: status, amount_paid: (bookingEdits as any).amount_paid ?? booking.amount_paid ?? 0 }, patch);
     flash('ok', 'Saved!');
   };
 
