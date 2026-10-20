@@ -780,7 +780,7 @@ const EventModal: React.FC<{
                       <span className="absolute left-2 top-2 text-[#9a8d78] text-sm">$</span>
                       <input type="number" step="0.01"
                        value={(bookingEdits as any).final_total_num || parseMoney(booking.final_total || booking.estimated_total) || ''}
-                        onChange={e => setBookingEdits(v => ({ ...v, final_total_num: parseFloat(e.target.value) || 0, final_total: '$' + (parseFloat(e.target.value) || 0).toFixed(2) }))}
+                       value={(bookingEdits as any).final_total_num !== undefined ? (bookingEdits as any).final_total_num : parseMoney(booking.final_total || booking.estimated_total)}
                         className="w-36 rounded border border-[#d8cbb4] pl-5 pr-2 py-1 text-sm text-right outline-none focus:border-[#c9a36a]" />
                     </div>
                   </div>
@@ -793,7 +793,7 @@ const EventModal: React.FC<{
                     <div className="relative">
                       <span className="absolute left-2 top-2 text-[#9a8d78] text-sm">$</span>
                       <input type="number" step="0.01"
-                      value={(bookingEdits as any).amount_paid || booking.amount_paid || ''}
+                    value={(bookingEdits as any).amount_paid !== undefined ? (bookingEdits as any).amount_paid : (booking.amount_paid || 0)}
                         onChange={e => setBookingEdits(v => ({ ...v, amount_paid: parseFloat(e.target.value) || 0 }))}
                         className="w-32 rounded border border-[#d8cbb4] pl-5 pr-2 py-1 text-sm text-right outline-none focus:border-[#c9a36a]" />
                     </div>
