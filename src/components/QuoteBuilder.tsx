@@ -171,7 +171,7 @@ const QuoteBuilder: React.FC<QuoteBuilderProps> = ({ onRequestQuote, onPayDeposi
     .reduce((sum, a) => sum + a.price_per_guest * state.guests, 0);
 
   // Calculate service addons total from DB addons
-    const dbServiceTotal = [...serviceAddons, ...staffAddons, ...travelAddons]
+    const dbServiceTotal = [...serviceAddons]
     .filter(a => state.serviceAddons.includes(a.id))
     .reduce((sum, a) => {
       if (a.price_per_hour > 0 && a.per_brander) return sum + a.price_per_hour * getBranderCount(state.guests) * state.hours;
