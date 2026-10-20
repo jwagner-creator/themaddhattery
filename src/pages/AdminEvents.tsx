@@ -433,7 +433,7 @@ const EventModal: React.FC<{
   const hatCost = autoHatCost > 0 ? autoHatCost : checklist.hats_cost;
   const totalCosts = staffTotal + hatCost + hatBarTotal + mercTotal + shipTotal + hotelTotal + mileageTotal + checklist.travel_cost + otherTotal;
   const finalTotal = parseMoney((bookingEdits as any).final_total || booking.final_total || booking.estimated_total);
-  const revenue = finalTotal;
+  const netProfit = revenue - totalCosts;
     
   const save = async () => {
     setSaving(true);
