@@ -203,6 +203,33 @@ const AdminAddons: React.FC = () => {
                   className="w-full rounded-lg border border-[#d8cbb4] px-3 py-2 text-sm outline-none focus:border-[#c9a36a]" />
               </div>
             </div>
+                <div className="mt-3">
+              <label className="block text-xs text-[#7a6e5c] mb-1">Photo (optional)</label>
+              <div className="flex gap-2 items-center">
+                {editValues.image_url && (
+                  <img src={editValues.image_url} alt="addon" className="w-16 h-16 object-cover rounded-lg border border-[#d8cbb4]" />
+                )}
+                <label className="flex items-center gap-2 rounded-lg border border-dashed border-[#d8cbb4] px-3 py-2 cursor-pointer hover:border-[#c9a36a] text-sm text-[#7a6e5c]">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                  {editValues.image_url ? 'Replace photo' : 'Upload photo'}
+                  <input type="file" accept="image/*" className="hidden"
+                    onChange={async e => {
+                      const file = e.target.files?.[0];
+                      if (!file) return;
+                      const ext = file.name.split('.').pop() || 'jpg';
+                      const path = `addons/${editingId}-${Date.now()}.${ext}`;
+                      const { error } = await supabase.storage.from('hat-bar-images').upload(path, file, { cacheControl: '3600', upsert: true });
+                      if (error) return;
+                      const url = supabase.storage.from('hat-bar-images').getPublicUrl(path).data.publicUrl;
+                      setEditValues(v => ({ ...v, image_url: url }));
+                    }} />
+                </label>
+                {editValues.image_url && (
+                  <button onClick={() => setEditValues(v => ({ ...v, image_url: null }))}
+                    className="text-red-400 hover:text-red-600 text-xs">Remove</button>
+                )}
+              </div>
+            </div>
             <div className="flex gap-2">
               <button onClick={saveEdit} disabled={saving}
                 className="rounded-full bg-[#c9a36a] hover:bg-[#b8915a] text-[#2a2018] font-semibold px-5 py-2 text-sm disabled:opacity-50">
