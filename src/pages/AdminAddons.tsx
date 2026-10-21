@@ -405,15 +405,14 @@ const AdminAddons: React.FC = () => {
                     <button onClick={() => setEditValues(v => ({ ...v, image_url: null }))}
                       className="text-red-400 hover:text-red-600 text-xs">Remove</button>
                   )}
+             
                 </div>
-              </div>
-              </div>
                 <label className="block text-xs text-[#7a6e5c] mb-1">Note (optional)</label>
                 <input value={newAddon.note || ''} onChange={e => setNewAddon(v => ({ ...v, note: e.target.value }))}
                   placeholder="Description shown to customers"
                   className="w-full rounded-lg border border-[#d8cbb4] px-3 py-2.5 text-sm outline-none focus:border-[#c9a36a]" />
               </div>
-              {newAddon.type === 'service' && (
+                {newAddon.type === 'service' && (
                 <div className="flex items-center gap-2">
                   <input type="checkbox" id="per_staff" checked={newAddon.per_staff || false}
                     onChange={e => setNewAddon(v => ({ ...v, per_staff: e.target.checked }))} />
