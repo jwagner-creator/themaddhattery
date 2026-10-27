@@ -199,4 +199,4 @@ export function computeQuote(state: QuoteState): QuoteBreakdown {
 }
 
 export const money = (n: number) =>
-  n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });: 'currency', currency: 'USD', maximumFractionDigits: 0 });
+  n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
