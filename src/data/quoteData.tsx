@@ -142,6 +142,11 @@ export interface QuoteState {
   customAddons: string[];
   sizes: string[];
   notes: string;
+  // Contact info — collected in the builder so checkout needs no re-entry
+  name: string;
+  email: string;
+  phone: string;
+  smsOptIn: boolean;
 }
 
 export interface QuoteBreakdown {
