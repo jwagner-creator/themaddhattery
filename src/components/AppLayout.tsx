@@ -75,10 +75,6 @@ const AppLayout: React.FC = () => {
         hatPricePerGuest={details?.hatPricePerGuest ?? 0}
         hearAboutUs={details?.hearAboutUs ?? ''}
         sourceLink={details?.sourceLink ?? ''}
-        initialName={details?.name ?? ''}
-        initialEmail={details?.email ?? ''}
-        initialPhone={details?.phone ?? ''}
-        initialSmsOptIn={details?.smsOptIn ?? true}
         notes={details?.notes ?? ''}
       />
     </div>
