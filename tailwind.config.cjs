@@ -9,14 +9,27 @@ module.exports = {
   ],
   prefix: "",
   theme: {
-    container: {
-      center: true,
-      padding: "2rem",
-      screens: {
-        "2xl": "1400px",
+  container: {
+    center: true,
+    padding: "2rem",
+    screens: {
+      "2xl": "1400px",
+    },
+  },
+  extend: {
+    animation: {
+      ticker: 'ticker 40s linear infinite',
+      'ticker-slow': 'ticker 55s linear infinite',
+    },
+    keyframes: {
+      ticker: {
+        '0%':   { transform: 'translateX(0)' },
+        '100%': { transform: 'translateX(-50%)' },
       },
     },
-    extend: {
+    // ...rest of your existing extend properties
+  },
+},
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
