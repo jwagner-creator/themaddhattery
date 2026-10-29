@@ -9,27 +9,14 @@ module.exports = {
   ],
   prefix: "",
   theme: {
-  container: {
-    center: true,
-    padding: "2rem",
-    screens: {
-      "2xl": "1400px",
-    },
-  },
-  extend: {
-    animation: {
-      ticker: 'ticker 40s linear infinite',
-      'ticker-slow': 'ticker 55s linear infinite',
-    },
-    keyframes: {
-      ticker: {
-        '0%':   { transform: 'translateX(0)' },
-        '100%': { transform: 'translateX(-50%)' },
+    container: {
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
       },
     },
-    // ...rest of your existing extend properties
-  },
-},
+    extend: {
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -85,6 +72,10 @@ module.exports = {
         sm: "calc(var(--radius) - 2px)",
       },
       keyframes: {
+        ticker: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
         "accordion-down": {
           from: { height: "0" },
           to: { height: "var(--radix-accordion-content-height)" },
@@ -103,6 +94,8 @@ module.exports = {
         },
       },
       animation: {
+        ticker: "ticker 40s linear infinite",
+        "ticker-slow": "ticker 55s linear infinite",
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-in": "fade-in 0.3s ease-out",
