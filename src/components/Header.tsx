@@ -20,7 +20,7 @@ const Header: React.FC<HeaderProps> = ({
             the maddhattery
           </span>
           <span className="block text-[10px] sm:text-xs uppercase tracking-[0.25em] text-white">
-            by VinHaus Hat Bar
+            Texas Based · Serving Texas and Beyond
           </span>
         </Link>
 
@@ -30,6 +30,7 @@ const Header: React.FC<HeaderProps> = ({
   <Link to="/#consultation" className="hover:text-[#c9a36a] transition-colors">Consultation</Link>
   <Link to="/wholesale" className="hover:text-[#c9a36a] transition-colors">Wholesale</Link>
   <a href="https://www.thevinhaus.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#c9a36a] transition-colors">Retail</a>
+  <a href="https://thevinhaus.myshopify.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#c9a36a] transition-colors">Shop</a>
 </nav>
 
         <div className="flex items-center gap-3">

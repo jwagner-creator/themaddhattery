@@ -9,7 +9,6 @@ import LeadModal from '@/components/LeadModal';
 import DepositCheckout from '@/components/DepositCheckout';
 import Footer from '@/components/Footer';
 import EventsTicker from '@/components/EventsTicker';
-import HoldMyDate from '@/components/HoldMyDate';
 
 const AppLayout: React.FC = () => {
   const [leadOpen, setLeadOpen] = useState(false);
@@ -35,8 +34,7 @@ const AppLayout: React.FC = () => {
       <Hero onPlan={scrollToBuilder} />
       <EventsTicker />
       <TestimonialsCarousel />
-      <HoldMyDate onBuildQuote={scrollToBuilder} />
-      <QuoteBuilder onRequestQuote={handleRequestQuote} onPayDeposit={handlePayDeposit} />
+<QuoteBuilder onRequestQuote={handleRequestQuote} onPayDeposit={handlePayDeposit} />
       <DesignGallery
         onConsult={() =>
           document.getElementById('consultation')?.scrollIntoView({ behavior: 'smooth' })

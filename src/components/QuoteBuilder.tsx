@@ -5,6 +5,7 @@ import {
   getTeamSize, recommendedHours, money, BOOKING_URL, QuoteState,
   SERVICE_ADDONS, CUSTOM_ADDONS,
 } from '@/data/quoteData';
+import HoldMyDate from '@/components/HoldMyDate';
 
 import { supabase } from '@/lib/supabase';
 import { fetchEventBuilderBases } from '@/lib/customBases';
@@ -534,15 +535,13 @@ const QuoteBuilder: React.FC<QuoteBuilderProps> = ({ onRequestQuote, onPayDeposi
               >
                 Request &amp; send quote
               </button>
-              <a href="https://calendar.google.com/appointments/schedules/AcZssZ3o57jSOcoanMiW3JEbOEyVSH49Vt9ackAM6N88iOTFg4OoBEWBOdeBudXC2OPOxEhvf_K5fRYk" target="_blank" rel="noopener noreferrer"
-                className="block text-center mt-3 text-sm text-[#cbbfa9] hover:text-[#c9a36a] underline underline-offset-4 transition-colors">
-                Or schedule a consultation
-              </a>
 
               <p className="mt-4 text-[11px] text-[#8c8170] leading-relaxed">
                 Estimate is a guide. Final pricing confirmed in your custom quote based on venue, travel, set up, break down, and selected add-ons.
               </p>
             </div>
+
+            <HoldMyDate />
           </div>
         </div>
       </div>
