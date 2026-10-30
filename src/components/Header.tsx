@@ -27,7 +27,6 @@ const Header: React.FC<HeaderProps> = ({
       <nav className="hidden lg:flex items-center gap-5 text-sm text-[#e7dcc9]">
   <Link to="/#builder" className="hover:text-[#c9a36a] transition-colors">Event quote</Link>
   <Link to="/design" className="hover:text-[#c9a36a] transition-colors">Custom hats &amp; builder</Link>
-  <Link to="/#consultation" className="hover:text-[#c9a36a] transition-colors">Consultation</Link>
   <Link to="/wholesale" className="hover:text-[#c9a36a] transition-colors">Wholesale</Link>
   <a href="https://www.thevinhaus.com" target="_blank" rel="noopener noreferrer" className="hover:text-[#c9a36a] transition-colors">Retail</a>
 </nav>

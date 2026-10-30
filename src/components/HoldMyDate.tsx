@@ -1,7 +1,6 @@
 import React from 'react';
 
-const CALENDAR_URL =
-  'https://calendar.google.com/appointments/schedules/AcZssZ3o57jSOcoanMiW3JEbOEyVSH49Vt9ackAM6N88iOTFg4OoBEWBOdeBudXC2OPOxEhvf_K5fRYk';
+const CALENDAR_URL = 'https://calendar.app.google/E3GBBynLhw2hcziN6';
 
 const HoldMyDate: React.FC = () => {
   return (
