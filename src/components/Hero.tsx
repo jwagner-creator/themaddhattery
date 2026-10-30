@@ -9,7 +9,7 @@ interface HeroProps {
 
 const Hero: React.FC<HeroProps> = ({ onPlan }) => {
   return (
-    <section className="relative flex items-center" style={{ minHeight: '70vh' }}>
+    <section className="relative flex items-center" style={{ minHeight: '50vh' }}>
       {/* Background: video with image fallback */}
       <div className="absolute inset-0">
         <video
