@@ -21,32 +21,51 @@ const Hero: React.FC<HeroProps> = ({
 
 
       <div className="relative max-w-7xl mx-auto px-5 w-full pt-28 pb-16">
-        <div className="max-w-2xl">
-          <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] mb-5 text-white">
-            <span className="h-px w-8 bg-[#c9a36a]" />
-            Plano &amp; Austin · Serving all of Texas
-          </p>
-          <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl text-[#f3ead9] leading-[1.05]">
-            the maddhattery
-          </h1>
-          <p className="mt-6 text-lg sm:text-xl text-[#e7dcc9] leading-relaxed max-w-xl">A full mobile hat bar brought to your venue — where every guest designs their very own personalized hat with our stylists. Bands, pins, feathers & more.
+        <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
 
-Girls night, Bachelorette party, Wedding gift, client or employee appreciation, or pop up at an event you are hosting!</p>
+          {/* Left: text */}
+          <div className="flex-1 max-w-2xl">
+            <p className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.25em] mb-5 text-white">
+              <span className="h-px w-8 bg-[#c9a36a]" />
+              Texas Based · Serving Texas and Beyond
+            </p>
+            <h1 className="font-serif text-5xl sm:text-6xl lg:text-7xl text-[#f3ead9] leading-[1.05]">
+              the maddhattery
+            </h1>
+            <p className="mt-6 text-lg sm:text-xl text-[#e7dcc9] leading-relaxed max-w-xl">
+              A full mobile hat bar brought to your venue — where every guest designs their very own
+              personalized hat with our stylists. Bands, pins, feathers &amp; more.
+            </p>
 
-          <div className="mt-9 flex flex-col sm:flex-row gap-4">
-            <button onClick={onPlan} className="rounded-full bg-[#c9a36a] hover:bg-[#b8915a] text-[#2a2018] font-semibold px-8 py-4 transition-colors shadow-xl">
-              Build your event quote
-            </button>
-            <a href="/design" className="rounded-full border border-[#e7dcc9]/40 hover:border-[#c9a36a] text-[#f3ead9] font-semibold px-8 py-4 text-center transition-colors">
-              View custom hats &amp; builder
-            </a>
+            <div className="mt-9 flex flex-col sm:flex-row gap-4">
+              <button onClick={onPlan} className="rounded-full bg-[#c9a36a] hover:bg-[#b8915a] text-[#2a2018] font-semibold px-8 py-4 transition-colors shadow-xl">
+                Build your event quote
+              </button>
+              <a href="/design" className="rounded-full border border-[#e7dcc9]/40 hover:border-[#c9a36a] text-[#f3ead9] font-semibold px-8 py-4 text-center transition-colors">
+                View custom hats &amp; builder
+              </a>
+            </div>
+
+            <div className="mt-10">
+              <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-[#e7dcc9] underline underline-offset-4 hover:text-[#c9a36a] transition-colors">
+                Book a free consultation now →
+              </a>
+            </div>
           </div>
 
-
-          <div className="mt-10">
-            <a href={BOOKING_URL} target="_blank" rel="noopener noreferrer" className="text-sm text-[#e7dcc9] underline underline-offset-4 hover:text-[#c9a36a] transition-colors">
-              Book a free consultation now →
-            </a>
+          {/* Right: polaroid photo */}
+          <div className="hidden lg:flex flex-col items-center shrink-0">
+            <div className="bg-white p-3 pb-10 shadow-2xl rotate-1 hover:rotate-0 transition-transform duration-300" style={{ width: '280px' }}>
+              <img
+                src="/hat-bar-experience.png"
+                alt="The Hat Bar Experience"
+                className="w-full object-cover"
+                style={{ height: '280px' }}
+              />
+              <p className="text-center font-sans font-bold tracking-[0.18em] text-[#2a2018] text-xs mt-4 uppercase">
+                The Hat Bar Experience
+              </p>
+            </div>
           </div>
 
         </div>
