@@ -386,6 +386,8 @@ const QuoteBuilder: React.FC<QuoteBuilderProps> = ({ onRequestQuote, onPayDeposi
                   <select value={state.hearAboutUs || ''} onChange={e => setState(s => ({ ...s, hearAboutUs: e.target.value }))}
                     className="w-full rounded-lg border border-[#e0d4c0] px-4 py-3 text-[#5b5043] outline-none focus:border-[#c9a36a] bg-white">
                     <option value="">Select one…</option>
+                    <option value="Jenn Wagner">Jenn Wagner</option>
+                    <option value="Jennifer Whitfield">Jennifer Whitfield</option>
                     <option value="Instagram">Instagram</option>
                     <option value="Facebook">Facebook</option>
                     <option value="Google">Google search</option>

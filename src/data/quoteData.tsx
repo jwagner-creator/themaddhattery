@@ -2,7 +2,7 @@
 
 export const BOOKING_URL =
   import.meta.env.VITE_BOOKING_URL ||
-  'https://calendar.app.google/E3GBBynLhw2hcziN6';
+  'https://calendar.app.google/h6nmnf5iRy1utSJ16';
 
 export const STYLIST_HOURLY_RATE = 25;
 export const DEPOSIT_PER_GUEST = 50;

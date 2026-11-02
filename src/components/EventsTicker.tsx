@@ -1,6 +1,6 @@
 import React, { useRef } from 'react';
 
-const CALENDAR_URL = 'https://calendar.app.google/E3GBBynLhw2hcziN6';
+const CALENDAR_URL = 'https://calendar.app.google/h6nmnf5iRy1utSJ16';
 
 interface EventItem {
   label: string;
