@@ -82,7 +82,7 @@ const DepositCheckout: React.FC<DepositCheckoutProps> = ({
         estimated_total: displayTotal ? money(displayTotal) : money(breakdown.total),
         deposit: displayDeposit ? money(displayDeposit) : money(breakdown.deposit),
         notes: notes || null,
-        source_detail: hearAboutUsProp || null,
+        referral_source: hearAboutUsProp || null,
         hat_price_per_guest: hatPricePerGuest || null,
         service_addons: serviceAddons.join(', ') || null,
         custom_addons: customAddons.join(', ') || null,
