@@ -70,6 +70,7 @@ create table if not exists leads (
 
   -- source
   source text,          -- 'quote-request' | 'footer-signup' | 'custom-hat-deposit'
+  referral_source text, -- 'Jenn Wagner' | 'Jennifer Whitfield' | 'Social Media' | 'Google Search' | 'Word of Mouth' | 'Event or Pop-up' | 'Other'
 
   -- event info (populated for quote requests)
   event_type text,

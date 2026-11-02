@@ -22,19 +22,6 @@ body{background:var(--bg);color:var(--fg);font-family:'DM Sans',system-ui,sans-s
 .btn:hover{opacity:.85}
 .social{font-size:0.82rem;color:var(--soft)}
 footer{font-size:0.73rem;color:var(--soft);opacity:.6}
-/* Modal */
-.overlay{position:fixed;inset:0;background:rgba(28,24,18,.55);display:flex;align-items:center;justify-content:center;padding:20px;z-index:100}
-.modal{background:#fff;border-radius:20px;box-shadow:0 8px 48px rgba(28,24,18,.22);max-width:360px;width:100%;padding:32px 28px;display:flex;flex-direction:column;gap:18px}
-.modal h2{font-size:1.15rem;font-weight:600;line-height:1.3}
-.modal p{font-size:0.875rem;color:var(--soft)}
-.field{display:flex;flex-direction:column;gap:6px}
-.field label{font-size:0.82rem;font-weight:500;color:var(--soft)}
-.field input,.field select{padding:11px 14px;border-radius:10px;border:1.5px solid #d9d4cc;font-family:inherit;font-size:0.95rem;background:#faf9f7;color:var(--fg);outline:none;transition:border-color .15s}
-.field input:focus,.field select:focus{border-color:var(--accent)}
-.field input.error,.field select.error{border-color:#c0392b}
-.modal-actions{display:flex;flex-direction:column;gap:10px;margin-top:4px}
-.skip{text-align:center;font-size:0.82rem;color:var(--soft);cursor:pointer;text-decoration:underline;text-underline-offset:3px;background:none;border:none;font-family:inherit}
-.skip:hover{color:var(--fg)}
 </style>
 </head>
 <body>
@@ -44,93 +31,13 @@ footer{font-size:0.73rem;color:var(--soft);opacity:.6}
   <div class="name">Jenn Wagner</div>
   <div class="meta">Owner · the maddhattery by VinHaus</div>
   <div class="actions">
-    <button class="btn btn-primary" onclick="openBooking()">📅 Book a Consultation</button>
+    <a class="btn btn-primary" href="https://calendar.app.google/h6nmnf5iRy1utSJ16" target="_blank" rel="noopener">📅 Book a Consultation</a>
+    <a class="btn btn-secondary" href="https://themaddhattery.netlify.app" target="_blank" rel="noopener">🎩 Build Your Hat Bar Event</a>
     <a class="btn btn-secondary" style="margin-top:0" href="data:text/vcard;charset=utf-8,BEGIN%3AVCARD%0D%0AVERSION%3A3.0%0D%0AFN%3AJenn%20Wagner%0D%0AN%3AWagner%3BJenn%3B%3B%3B%0D%0AORG%3Athe%20maddhattery%20by%20VinHaus%0D%0ATITLE%3AOwner%0D%0AEMAIL%3Ajwagner%40next-jennconsulting.com%0D%0AURL%3Ahttps%3A//themaddhattery.netlify.app/%3Fref%3Djenn-wagner%0D%0AX-SOCIALPROFILE%3Btype%3Dinstagram%3A%40themaddhattery%0D%0AEND%3AVCARD" download="jenn-wagner.vcf">💾 Save Contact</a>
   </div>
   <div class="social">@themaddhattery</div>
 </div>
 <footer>the maddhattery by VinHaus</footer>
 
-<!-- Netlify form detection (must be in static HTML) -->
-<form name="consultation-lead" netlify data-netlify="true" netlify-honeypot="bot-field" hidden>
-  <input name="form-name" value="consultation-lead">
-  <input name="bot-field">
-  <input name="visitor-name">
-  <input name="email">
-  <input name="heard-from">
-  <input name="staff-member">
-</form>
-
-<!-- Lead capture modal -->
-<div id="overlay" class="overlay" style="display:none" onclick="if(event.target===this)closeModal()">
-  <div class="modal">
-    <h2>One quick question before you book 👋</h2>
-    <p>Helps us get ready for your consultation.</p>
-    <form id="lead-form" novalidate>
-      <div style="display:flex;flex-direction:column;gap:14px">
-        <div class="field">
-          <label for="lf-name">Your name *</label>
-          <input id="lf-name" name="visitor-name" type="text" placeholder="First name is fine" autocomplete="given-name">
-        </div>
-        <div class="field">
-          <label for="lf-email">Email *</label>
-          <input id="lf-email" name="email" type="email" placeholder="you@example.com" autocomplete="email">
-        </div>
-        <div class="field">
-          <label for="lf-heard">How did you hear about us? *</label>
-          <select id="lf-heard" name="heard-from">
-            <option value="">— please choose —</option>
-            <option value="Jenn Wagner" selected>Jenn Wagner</option>
-            <option value="Jennifer Whitfield">Jennifer Whitfield</option>
-            <option value="Social Media">Social Media</option>
-            <option value="Google Search">Google Search</option>
-            <option value="Word of Mouth">Word of Mouth</option>
-            <option value="Event or Pop-up">Event or Pop-up</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        <input type="hidden" name="staff-member" value="Jenn Wagner">
-      </div>
-      <div class="modal-actions" style="margin-top:20px">
-        <button type="submit" class="btn btn-primary">Continue to Booking →</button>
-        <button type="button" class="skip" onclick="skipToCalendar()">Skip — go straight to booking</button>
-      </div>
-    </form>
-  </div>
-</div>
-
-<script>
-const CAL = 'https://calendar.app.google/h6nmnf5iRy1utSJ16';
-function openBooking() { document.getElementById('overlay').style.display = 'flex'; }
-function closeModal()  { document.getElementById('overlay').style.display = 'none'; }
-function skipToCalendar() { closeModal(); window.open(CAL, '_blank'); }
-
-document.getElementById('lead-form').addEventListener('submit', async function(e) {
-  e.preventDefault();
-  const form = e.target;
-  const name  = form['visitor-name'].value.trim();
-  const email = form['email'].value.trim();
-  const heard = form['heard-from'].value;
-  let ok = true;
-  ['visitor-name','email','heard-from'].forEach(n => form[n].classList.remove('error'));
-  if (!name)  { form['visitor-name'].classList.add('error'); ok = false; }
-  if (!email || !email.includes('@')) { form['email'].classList.add('error'); ok = false; }
-  if (!heard) { form['heard-from'].classList.add('error'); ok = false; }
-  if (!ok) return;
-  // Submit to Netlify
-  const body = new URLSearchParams({
-    'form-name':    'consultation-lead',
-    'visitor-name': name,
-    'email':        email,
-    'heard-from':   heard,
-    'staff-member': 'Jenn Wagner'
-  });
-  try {
-    await fetch('/', { method: 'POST', headers: {'Content-Type':'application/x-www-form-urlencoded'}, body: body.toString() });
-  } catch(_) {}
-  closeModal();
-  window.open(CAL, '_blank');
-});
-</script>
 </body>
 </html>

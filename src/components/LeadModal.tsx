@@ -32,7 +32,18 @@ const LeadModal: React.FC<LeadModalProps> = ({
   const [smsOptIn, setSmsOptIn] = useState(true);
   const [eventDate, setEventDate] = useState('');
   const [notes, setNotes] = useState('');
+  const [referralSource, setReferralSource] = useState('');
   const [status, setStatus] = useState<'idle' | 'loading' | 'done' | 'error'>('idle');
+
+  const REFERRAL_OPTIONS = [
+    'Jenn Wagner',
+    'Jennifer Whitfield',
+    'Social Media',
+    'Google Search',
+    'Word of Mouth',
+    'Event or Pop-up',
+    'Other',
+  ];
 
   useEffect(() => {
     if (open) {
@@ -61,6 +72,7 @@ const LeadModal: React.FC<LeadModalProps> = ({
         estimated_total: breakdown ? money(breakdown.total) : null,
         deposit: breakdown ? money(breakdown.deposit) : null,
         notes: notes || null,
+        referral_source: referralSource || null,
       });
 
       try {
@@ -123,6 +135,13 @@ const LeadModal: React.FC<LeadModalProps> = ({
                 <textarea value={notes} onChange={e => setNotes(e.target.value)}
                   placeholder="Anything else we should know? (venue, theme, custom add-ons...)" rows={3}
                   className="w-full rounded-lg border border-[#d8cbb4] bg-white px-4 py-3 text-[#2a2018] outline-none focus:border-[#c9a36a] resize-none" />
+                <select value={referralSource} onChange={e => setReferralSource(e.target.value)}
+                  className="w-full rounded-lg border border-[#d8cbb4] bg-white px-4 py-3 text-[#5b5043] outline-none focus:border-[#c9a36a]">
+                  <option value="">How did you hear about us?</option>
+                  {REFERRAL_OPTIONS.map(opt => (
+                    <option key={opt} value={opt}>{opt}</option>
+                  ))}
+                </select>
                 <label className="flex items-start gap-2 text-sm text-[#5b5043]">
                   <input type="checkbox" checked={smsOptIn} onChange={e => setSmsOptIn(e.target.checked)} className="mt-1" />
                   <span>Text me about my event. Msg &amp; data rates may apply. Reply STOP to unsubscribe.</span>
