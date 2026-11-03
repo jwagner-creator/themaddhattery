@@ -16,6 +16,7 @@ const NAV_LINKS = [
   { to: '/maddhattery-admin/quotes', label: 'Quote requests' },
   { to: '/maddhattery-admin/addons', label: 'Add-ons' },
   { to: '/maddhattery-admin/testimonials', label: 'Testimonials' },
+  { to: '/maddhattery-admin/vcards', label: 'Staff QR cards' },
 ];
 
 interface Testimonial {

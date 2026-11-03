@@ -14,6 +14,7 @@ const NAV_LINKS = [
   { to: '/maddhattery-admin/staff', label: 'Staff roster' },
   { to: '/maddhattery-admin/addons', label: 'Add-ons' },
   { to: '/maddhattery-admin/testimonials', label: 'Testimonials' },
+  { to: '/maddhattery-admin/vcards', label: 'Staff QR cards' },
 ];
 
 interface StaffMember {

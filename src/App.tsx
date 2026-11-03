@@ -8,6 +8,7 @@ import AdminAddons from './pages/AdminAddons';
 import AdminEvents from './pages/AdminEvents';
 import AdminStaff from './pages/AdminStaff';
 import AdminTestimonials from './pages/AdminTestimonials';
+import AdminVCards from './pages/AdminVCards';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -50,6 +51,7 @@ const App = () => (
             <Route path="/maddhattery-admin/events" element={<AdminEvents />} />
             <Route path="/maddhattery-admin/staff" element={<AdminStaff />} />
             <Route path="/maddhattery-admin/testimonials" element={<AdminTestimonials />} />
+            <Route path="/maddhattery-admin/vcards" element={<AdminVCards />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </BrowserRouter>
