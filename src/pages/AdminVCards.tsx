@@ -349,8 +349,9 @@ const AdminVCards: React.FC = () => {
           <label style={labelStyle}>Instagram handle</label>
           <input style={inputStyle} value={person.instagram} onChange={e => set('instagram', e.target.value)} placeholder="@themaddhattery" />
 
-          <label style={labelStyle}>Booking link (optional)</label>
+          <label style={labelStyle}>Consultation booking link (optional)</label>
           <input style={inputStyle} value={person.booking} onChange={e => set('booking', e.target.value)} placeholder="https://calendar.app.google/…" />
+          <p style={{ fontSize: '0.75rem', color: '#6b6358', marginTop: 3 }}>Adds a "Book a Consultation" button to the landing page.</p>
 
           <label style={labelStyle}>Photo</label>
           <input type="file" accept="image/*" onChange={handlePhoto} style={{ marginTop: 6, fontSize: '0.9rem', width: '100%' }} />
@@ -435,6 +436,7 @@ const AdminVCards: React.FC = () => {
                 {person.title && <div style={{ fontSize: '0.85rem', color: '#6b6358' }}>{person.title}</div>}
                 <div style={{ fontSize: '0.8rem', color: '#6b6358' }}>{DEFAULT_ORG}</div>
                 {person.instagram && <div style={{ fontSize: '0.78rem', color: '#a8813f' }}>{person.instagram}</div>}
+                {person.booking && <div style={{ fontSize: '0.78rem', background: '#c9a36a', color: '#fff', borderRadius: 6, padding: '4px 10px', marginTop: 4 }}>📅 Book a Consultation</div>}
               </div>
             </div>
           )}
