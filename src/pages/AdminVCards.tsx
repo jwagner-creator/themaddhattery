@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 const ADMIN_PASSWORD = 'hatbar26';
 const AUTH_KEY = 'maddhattery_admin_auth';
 const SITE_URL = 'https://themaddhattery.netlify.app';
-const DEFAULT_ORG = 'the maddhattery by VinHaus';
+const DEFAULT_ORG = 'the maddhattery by The VinHaus';
 const GH_OWNER = 'jwagner-creator';
 const GH_REPO = 'themaddhattery';
 
